@@ -1,0 +1,9 @@
+{
+	"database": {
+		"name"		: "gokien_development",
+		"host"		: "localhost",
+		"username"	: "postgres",
+		"password"	: "123456"
+
+	}
+}
