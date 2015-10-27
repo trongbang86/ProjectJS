@@ -1,9 +1,10 @@
 /*
 This loads settings from corresponding configuration json-based file
+@this: Project object - settings
 @return: [nconf]
 */
 module.exports = function(){
-	var env = process.env.NODE_ENV || 'development';
+	var env = this.env;
 	var nconf = require('nconf');
 	var path = require('path');
 	nconf.argv().env()
