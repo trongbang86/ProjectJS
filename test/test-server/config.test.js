@@ -7,4 +7,13 @@ describe('Configuration', function(){
 		var testConfig = require('../../config/env/test.json');
 		expect(Project.database.name).to.eq(testConfig.database.name);
 	});
+	
+	it("throws Error if 'default' is used as the environment name", function(){
+		expect(function(){
+			var denyDefaultEnv = require('../../config/bootstrap.js').denyDefaultEnv;
+			expect(denyDefaultEnv).to.exist;
+			denyDefaultEnv('test');
+			
+		}).to.throw(Error);
+	});
 });
