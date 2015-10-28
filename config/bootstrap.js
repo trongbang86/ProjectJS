@@ -28,8 +28,9 @@ module.exports = function(express){
 	var nconfInstance = require(__dirname + "/env").call(project);
 	cloneProperties(nconfInstance, project);
 
+	/* Defining global utilities */
+	global._ = require('underscore');
 	
-
 	return project;
 };
 

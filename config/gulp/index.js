@@ -1,11 +1,5 @@
 var gulp 			= require('gulp'),
-	autoprefixer		= require('gulp-autoprefixer'),
-	sass				= require('gulp-ruby-sass'),
-	minifycss		= require('gulp-minify-css'),
-	uglifyjs			= require('gulp-uglify'),
-	concat			= require('gulp-concat'),
-	del				= require('del'),
-	gulpUtil			= require('gulp-util');
+	fs				= require('fs');
 
 /**
  * This is to load project settings
@@ -13,21 +7,25 @@ var gulp 			= require('gulp'),
 require('../../app.js');
 
 /**
+ * Loading tasks based on the current environment
+ */
+var defaultTasks = require('./default.js');
+var envSpecTasks = {},
+	envSpecTasksFile = __dirname + '/' + Project.env + '.js';
+
+if(fs.existsSync(envSpecTasksFile)){
+	envSpecTasks = require(envSpecTasksFile);
+}
+var tasks = _.extend({}, defaultTasks, envSpecTasks);
+
+/**
 This cleans out the .tmp folder
 */
-gulp.task('clean', function(cb){
-	return del(['.tmp'], cb);
-});
+gulp.task('clean', tasks.clean);
 
 /**
 This compiles sass files. Then it auto-prefixes, concats and
 does all other jobs related to css
 Result is all.css to be used
 */
-gulp.task('style', ['clean'], function(){
-	return sass(Project.gulp.frontEndStyleSheets).
-		pipe(autoprefixer('last 2 versions')).
-		pipe(concat('all.css')).
-		pipe(minifycss()).
-		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
-});
+gulp.task('style', ['clean'], tasks.style);

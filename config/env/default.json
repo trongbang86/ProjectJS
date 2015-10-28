@@ -2,6 +2,7 @@
 	"This_is_for_testing": "This_is_for_testing",
 	"gulp": {
 		"frontEndStyleSheets": "frontend/stylesheets/**.sass",
+		"tmpFolder": ".tmp",
 		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets/"
 	}
 }
