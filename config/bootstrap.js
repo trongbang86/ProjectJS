@@ -40,6 +40,8 @@ module.exports = function(express){
  * @param project
  */
 function cloneProperties(nconf, project) {
-	project.database = nconf.get('database');
+	project.database 	= nconf.get('database');
+	project.gulp			= nconf.get('gulp');
+	/* This function is assigned for testing purposes */
 	project.denyDefaultEnv = denyDefaultEnv;
 }

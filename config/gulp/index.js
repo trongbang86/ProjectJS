@@ -8,6 +8,11 @@ var gulp 			= require('gulp'),
 	gulpUtil			= require('gulp-util');
 
 /**
+ * This is to load project settings
+ */
+require('../../app.js');
+
+/**
 This cleans out the .tmp folder
 */
 gulp.task('clean', function(cb){
@@ -20,9 +25,9 @@ does all other jobs related to css
 Result is all.css to be used
 */
 gulp.task('style', ['clean'], function(){
-	return sass('frontend/stylesheets/**.sass').
+	return sass(Project.gulp.frontEndStyleSheets).
 		pipe(autoprefixer('last 2 versions')).
 		pipe(concat('all.css')).
 		pipe(minifycss()).
-		pipe(gulp.dest('.tmp/frontend/stylesheets/'));
+		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
 });
