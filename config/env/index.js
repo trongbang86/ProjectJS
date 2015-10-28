@@ -8,7 +8,8 @@ module.exports = function(){
 	var nconf = require('nconf');
 	var path = require('path');
 	nconf.argv().env()
-		.file({file: path.join(__dirname, env + ".json")});
+		.file(env, path.join(__dirname, env + ".json"))
+		.file('default', path.join(__dirname, "default.json"));
 
 	return nconf;		
 }

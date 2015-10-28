@@ -1,11 +1,11 @@
 var gulp 			= require('gulp'),
-	autoprefixer	= require('gulp-autoprefixer'),
-	sass			= require('gulp-ruby-sass'),
+	autoprefixer		= require('gulp-autoprefixer'),
+	sass				= require('gulp-ruby-sass'),
 	minifycss		= require('gulp-minify-css'),
-	uglifyjs		= require('gulp-uglify'),
+	uglifyjs			= require('gulp-uglify'),
 	concat			= require('gulp-concat'),
 	del				= require('del'),
-	gulpUtil		= require('gulp-util');
+	gulpUtil			= require('gulp-util');
 
 /**
 This cleans out the .tmp folder
