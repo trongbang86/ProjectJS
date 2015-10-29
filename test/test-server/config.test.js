@@ -17,8 +17,8 @@ describe('Configuration', function(){
 		}).to.throw(Error);
 	});
 	
-	it('uses default values if the value is not set \
-			in the corresponding environment file', function(){
+	it('uses default values if the value is not set ' + 
+			'in the corresponding environment file', function(){
 		var nconfInstance = require(Project.ROOT_FOLDER + '/config/env').call(null);
 		expect(nconfInstance.get('This_is_for_testing')).to.eq('This_is_for_testing');
 	});

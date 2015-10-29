@@ -1,3 +1,5 @@
+var path = require('path');
+
 /**
  * This throws error if env === 'default'
  * @param env the value of the current environment
@@ -11,14 +13,24 @@ function denyDefaultEnv(env) {
 /**
  * This is the heart of the project-specific settings
  * @param express the server running this project
+ * @return project {}
+ *		- env
+ *		- ROOT_FOLDER
+ *		- database
+ *		- gulp
+ *		- denyDefaultEnv
+ *		- routes
  */
 module.exports = function(express){
+	/* Defining global utilities */
+	global._ = require('underscore');
+
+	/* Setting up all variables */
 	var env = process.env.NODE_ENV || 'development';
 	
 	denyDefaultEnv(env);
 	
 	var project = {};
-	var path = require('path');
 
 	/* Defining extra utilities*/
 	project.env = env;
@@ -28,9 +40,10 @@ module.exports = function(express){
 	var nconfInstance = require(__dirname + "/env").call(project);
 	cloneProperties(nconfInstance, project);
 
-	/* Defining global utilities */
-	global._ = require('underscore');
-	
+	/* Defining routes */
+	project.routes = {};
+	__loadRoutes__(project, express);
+
 	return project;
 };
 
@@ -45,4 +58,21 @@ function cloneProperties(nconf, project) {
 	project.gulp			= nconf.get('gulp');
 	/* This function is assigned for testing purposes */
 	project.denyDefaultEnv = denyDefaultEnv;
+}
+
+/**
+ * This loads automatically all the routes
+ * by looping through routes folder
+ * @param project the project setting object
+ * @param express the server running this project
+ */
+function __loadRoutes__(project, express) {
+	var fs = require('fs');
+	var routesFolder = path.join(project.ROOT_FOLDER, 'routes');
+	var routeFiles = fs.readdirSync(routesFolder);
+	_.each(routeFiles, function(file){
+		var routeDefinition = require(path.join(routesFolder, file));
+		express.use(routeDefinition.base, routeDefinition.router);
+		project.routes[routeDefinition.base] = routeDefinition.router;
+	});
 }
