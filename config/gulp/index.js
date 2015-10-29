@@ -24,7 +24,8 @@ This cleans out the .tmp folder
 gulp.task('clean', tasks.clean);
 
 /**
-This compiles sass files. Then it auto-prefixes, concats and
+This compiles sass files. Depending on which environment it's running,
+it auto-prefixes, concats and
 does all other jobs related to css
 Result is all.css to be used
 */
