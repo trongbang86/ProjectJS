@@ -30,3 +30,10 @@ does all other jobs related to css
 Result is all.css to be used
 */
 gulp.task('style', ['clean'], tasks.style);
+
+/**
+ * This injects vendor javascripts and css files into layout(s)
+ * using the bower.json file
+ */
+gulp.task('bowerWiredep', tasks.bowerWiredep);
+

@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" ng-app="gokien">
   <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A Title</title>
+
+  	<!-- build:css css/vendor.css -->
+  		<!-- bower:css -->
+  		<link rel="stylesheet" href="/static/stylesheets/bootstrap/dist/css/bootstrap.css" />
+  		<!-- endbower -->
+  	<!-- endbuild -->
+
+
+  	<!-- app_bower:css -->
+  	<!-- endbower -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
   <body>
-    {{{body}}}
+	
+    <div class="container">
+
+      {{body}}
+
+    </div><!-- /.container -->
+
+    <!-- build:js js/vendor.js -->
+	  	<!-- bower:js -->
+	  	<script src="/static/javascript/jquery/dist/jquery.js"></script>
+	  	<script src="/static/javascript/angular/angular.js"></script>
+	  	<script src="/static/javascript/bootstrap/dist/js/bootstrap.js"></script>
+	  	<!-- endbower -->
+  	<!-- endbuild -->
+
+  	<!-- app_bower:js -->
+  	<!-- endbower -->
   </body>
 </html>
