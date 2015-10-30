@@ -39,29 +39,40 @@ module.exports = function(server){
 
 	/* Using nconf to get custom settings for different environments */
 	var nconfInstance = require(__dirname + "/env").call(project);
-	cloneProperties(nconfInstance, project);
+	__cloneProperties__(nconfInstance, project);
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
 	 */
 	if(server){
-
-		/* Defining routes */
-		project.routes = {};
-		__loadRoutes__(project, server);
-		debugger;
-		server.use('/static/js', 
-				express.static(project.gulp.tmpJavascriptFolder));
-		
-		server.use('/static/stylesheets',
-				express.static(project.gulp.tmpStyleSheetFolder));
-		
-		server.use('/static/vendor',
-				express.static(project.gulp.tmpVendorFolder));
+		__applyServerSetup__(project, server);
 	}
 
 	return project;
 };
+
+/**
+ * This sets up settings for server
+ * @param project the project setting object
+ * @param server the server running
+ */
+function __applyServerSetup__(project, server){
+
+	/* Defining routes */
+	project.routes = {};
+	__loadRoutes__(project, server);
+	
+	/* Defining static routes */
+	server.use('/static/js', 
+			express.static(project.gulp.tmpJavascriptFolder));
+	
+	server.use('/static/stylesheets',
+			express.static(project.gulp.tmpStyleSheetFolder));
+	
+	server.use('/static/vendor',
+			express.static(project.gulp.tmpVendorFolder));
+	
+}
 
 /**
  * This copies value from nconf to project so that
@@ -69,7 +80,7 @@ module.exports = function(server){
  * @param nconf
  * @param project
  */
-function cloneProperties(nconf, project) {
+function __cloneProperties__(nconf, project) {
 	project.database 	= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
 	__addRootFolder__(project, project.gulp);
