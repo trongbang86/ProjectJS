@@ -37,3 +37,9 @@ gulp.task('style', ['clean'], tasks.style);
  */
 gulp.task('bowerWiredep', tasks.bowerWiredep);
 
+
+/**
+ * This copies all bower enabled dependencies to temporary folder
+ */
+gulp.task('copyBowerFiles', tasks.copyBowerFiles);
+

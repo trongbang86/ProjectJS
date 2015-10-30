@@ -44,3 +44,9 @@ module.exports.bowerWiredep = function() {
 				pipe(gulp.dest(path.join(Project.ROOT_FOLDER, 
 								Project.gulp.frontEndViewsFolder)));
 }
+
+/* @Inherit */
+module.exports.copyBowerFiles = function() {
+	return gulp.src(mainBowerFiles())
+			.pipe(gulp.dest(Project.gulp.tmpFolder));
+}
