@@ -3,7 +3,9 @@
 	"gulp": {
 		"frontEndViewsFolder": "frontend/views",
 		"frontEndStyleSheets": "frontend/stylesheets/**.sass",
+		"tmpVendorFolder": ".tmp/vendor",
 		"tmpFolder": ".tmp",
-		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets/"
+		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets",
+		"tmpJavascriptFolder": ".tmp/frontend/js"
 	}
 }

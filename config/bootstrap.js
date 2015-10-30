@@ -1,4 +1,5 @@
-var path = require('path');
+var path 		= require('path'),
+	express		= require('express');
 
 /**
  * This throws error if env === 'default'
@@ -12,7 +13,7 @@ function denyDefaultEnv(env) {
 
 /**
  * This is the heart of the project-specific settings
- * @param express the server running this project
+ * @param server the server running this project
  * @return project {}
  *		- env
  *		- ROOT_FOLDER
@@ -21,7 +22,7 @@ function denyDefaultEnv(env) {
  *		- denyDefaultEnv
  *		- routes
  */
-module.exports = function(express){
+module.exports = function(server){
 	/* Defining global utilities */
 	global._ = require('underscore');
 
@@ -39,10 +40,28 @@ module.exports = function(express){
 	/* Using nconf to get custom settings for different environments */
 	var nconfInstance = require(__dirname + "/env").call(project);
 	cloneProperties(nconfInstance, project);
+	
+	/* if express server is passed in, we set up specific
+	 * settings for the server
+	 */
+	if(server){
 
-	/* Defining routes */
-	project.routes = {};
-	__loadRoutes__(project, express);
+		/* Defining routes */
+		project.routes = {};
+		__loadRoutes__(project, server);
+		
+		server.use('/static/js', 
+				express.static(path.join(project.ROOT_FOLDER, 
+						project.gulp.tmpJavascriptFolder)));
+		
+		server.use('/static/stylesheets',
+				express.static(path.join(project.ROOT_FOLDER,
+						project.gulp.tmpStyleSheetFolder)));
+		
+		server.use('/static/vendor',
+				express.static(path.join(project.ROOT_FOLDER,
+						project.gulp.tmpVendorFolder)));
+	}
 
 	return project;
 };
@@ -64,15 +83,15 @@ function cloneProperties(nconf, project) {
  * This loads automatically all the routes
  * by looping through routes folder
  * @param project the project setting object
- * @param express the server running this project
+ * @param server the server running this project
  */
-function __loadRoutes__(project, express) {
+function __loadRoutes__(project, server) {
 	var fs = require('fs');
 	var routesFolder = path.join(project.ROOT_FOLDER, 'routes');
 	var routeFiles = fs.readdirSync(routesFolder);
 	_.each(routeFiles, function(file){
 		var routeDefinition = require(path.join(routesFolder, file));
-		express.use(routeDefinition.base, routeDefinition.router);
+		server.use(routeDefinition.base, routeDefinition.router);
 		project.routes[routeDefinition.base] = routeDefinition.router;
 	});
 }

@@ -1,10 +1,29 @@
-var del 			= require('del'),
-	sass			= require('gulp-ruby-sass'),
-	autoprefixer	= require('gulp-autoprefixer'),
-	gulp 			= require('gulp'),
-	wiredep			= require('wiredep').stream,
-	path			= require('path'),
-	mainBowerFiles	= require('main-bower-files');
+var del 					= require('del'),
+	sass					= require('gulp-ruby-sass'),
+	autoprefixer			= require('gulp-autoprefixer'),
+	gulp 				= require('gulp'),
+	wiredep				= require('wiredep').stream,
+	path					= require('path'),
+	mainBowerFiles		= require('main-bower-files');
+
+/* Wiredep settings for injecting bower enabled dependencies */
+var bowerWiredepOptions 	= {
+		ignorePath: /(\.\.\/){2}bower_components\//,
+
+		fileTypes: {
+			html: {
+				block: /(([ \t]*)<!--\s*bower:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi,
+				detect: {
+					js: /<script.*src=['"]([^'"]+)/gi,
+					css: /<link.*href=['"]([^'"]+)/gi
+				},
+				replace: {
+					js: '<script src="/static/vendor/{{filePath}}"></script>',
+					css: '<link rel="stylesheet" href="/static/vendor/{{filePath}}" />'
+				}
+			}
+		}
+}
 
 /* @Inherit */
 module.exports.clean = function(cb){
@@ -24,23 +43,7 @@ module.exports.bowerWiredep = function() {
 								Project.gulp.frontEndViewsFolder,
 								'layout.html');
 	return gulp.src([layoutFile]).
-				pipe(wiredep({
-					ignorePath: /(\.\.\/){2}bower_components\//,
-
-					fileTypes: {
-						html: {
-							block: /(([ \t]*)<!--\s*bower:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi,
-							detect: {
-								js: /<script.*src=['"]([^'"]+)/gi,
-								css: /<link.*href=['"]([^'"]+)/gi
-							},
-							replace: {
-								js: '<script src="/static/javascript/{{filePath}}"></script>',
-								css: '<link rel="stylesheet" href="/static/stylesheets/{{filePath}}" />'
-							}
-						}
-					}
-				})).
+				pipe(wiredep(bowerWiredepOptions)).
 				pipe(gulp.dest(path.join(Project.ROOT_FOLDER, 
 								Project.gulp.frontEndViewsFolder)));
 }
@@ -48,5 +51,5 @@ module.exports.bowerWiredep = function() {
 /* @Inherit */
 module.exports.copyBowerFiles = function() {
 	return gulp.src(mainBowerFiles())
-			.pipe(gulp.dest(Project.gulp.tmpFolder));
+			.pipe(gulp.dest(Project.gulp.tmpVendorFolder));
 }
