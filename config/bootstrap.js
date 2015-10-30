@@ -49,18 +49,15 @@ module.exports = function(server){
 		/* Defining routes */
 		project.routes = {};
 		__loadRoutes__(project, server);
-		
+		debugger;
 		server.use('/static/js', 
-				express.static(path.join(project.ROOT_FOLDER, 
-						project.gulp.tmpJavascriptFolder)));
+				express.static(project.gulp.tmpJavascriptFolder));
 		
 		server.use('/static/stylesheets',
-				express.static(path.join(project.ROOT_FOLDER,
-						project.gulp.tmpStyleSheetFolder)));
+				express.static(project.gulp.tmpStyleSheetFolder));
 		
 		server.use('/static/vendor',
-				express.static(path.join(project.ROOT_FOLDER,
-						project.gulp.tmpVendorFolder)));
+				express.static(project.gulp.tmpVendorFolder));
 	}
 
 	return project;
@@ -75,6 +72,7 @@ module.exports = function(server){
 function cloneProperties(nconf, project) {
 	project.database 	= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
+	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
 	project.denyDefaultEnv = denyDefaultEnv;
 }
@@ -93,5 +91,22 @@ function __loadRoutes__(project, server) {
 		var routeDefinition = require(path.join(routesFolder, file));
 		server.use(routeDefinition.base, routeDefinition.router);
 		project.routes[routeDefinition.base] = routeDefinition.router;
+	});
+}
+
+/**
+ * This loops through the map and prefixes
+ * ROOT_FOLDER to any entry with the key /Folder$/
+ * so they can become absolute paths
+ * @param project the project setting object
+ * @param gulpDef project.gulp a list of gulp related settings
+ */
+function __addRootFolder__(project, gulpDef){
+	var keys = _.keys(gulpDef);
+	_.each(keys, function(key){
+		if(/Folder$/.test(key)){
+			gulpDef[key] = path.join(project.ROOT_FOLDER, 
+					gulpDef[key]);
+		}
 	});
 }

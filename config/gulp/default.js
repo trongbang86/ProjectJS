@@ -39,13 +39,11 @@ module.exports.style = function() {
 
 /* @Inherit */
 module.exports.bowerWiredep = function() {
-	var layoutFile = path.join(Project.ROOT_FOLDER, 
-								Project.gulp.frontEndViewsFolder,
+	var layoutFile = path.join(Project.gulp.frontEndViewsFolder,
 								'layout.html');
 	return gulp.src([layoutFile]).
 				pipe(wiredep(bowerWiredepOptions)).
-				pipe(gulp.dest(path.join(Project.ROOT_FOLDER, 
-								Project.gulp.frontEndViewsFolder)));
+				pipe(gulp.dest(Project.gulp.frontEndViewsFolder));
 }
 
 /* @Inherit */

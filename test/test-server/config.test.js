@@ -23,4 +23,10 @@ describe('Configuration', function(){
 		expect(nconfInstance.get('This_is_for_testing')).to.eq('This_is_for_testing');
 	});
 	
+	it('automatically prefixes ROOT_FOLDER ' +
+			'to any gulp setting ending with Folder', function(){
+		expect(new RegExp('^'+Project.ROOT_FOLDER)
+				.test(Project.gulp.tmpFolder)).to.eq(true);
+	});
+	
 });
