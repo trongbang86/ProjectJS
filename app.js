@@ -22,7 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, Project.gulp.tmpFolder)));
+app.use('/static', express.static(path.join(Project.ROOT_FOLDER, 
+                          Project.gulp.tmpFolder, 'frontend')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
