@@ -44,3 +44,7 @@ gulp.task('bowerWiredep', tasks.bowerWiredep);
  */
 gulp.task('copyBowerFiles', tasks.copyBowerFiles);
 
+/**
+ *
+ */
+gulp.task('copyFrontEndViewsFiles', tasks.copyFrontEndViewsFiles);

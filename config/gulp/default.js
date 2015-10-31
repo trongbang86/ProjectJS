@@ -23,7 +23,7 @@ var bowerWiredepOptions 	= {
 				}
 			}
 		}
-}
+};
 
 /* @Inherit */
 module.exports.clean = function(cb){
@@ -35,7 +35,7 @@ module.exports.style = function() {
 	return sass(Project.gulp.frontEndStyleSheets).
 		pipe(autoprefixer('last 2 versions')).
 		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
-}
+};
 
 /* @Inherit */
 module.exports.bowerWiredep = function() {
@@ -44,10 +44,16 @@ module.exports.bowerWiredep = function() {
 	return gulp.src([layoutFile]).
 				pipe(wiredep(bowerWiredepOptions)).
 				pipe(gulp.dest(Project.gulp.frontEndViewsFolder));
-}
+};
 
 /* @Inherit */
 module.exports.copyBowerFiles = function() {
 	return gulp.src(mainBowerFiles())
 			.pipe(gulp.dest(Project.gulp.tmpVendorFolder));
-}
+};
+
+/* @Inherit */
+module.exports.copyFrontEndViewsFiles = function() {
+	return gulp.src(Project.gulp.frontEndViewsFolder+'/**/*').
+			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
+};
