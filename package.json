@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test-server": "mocha -R spec test/test-server/bootstrap.js test/test-server"
+    "test-server": "mocha -R spec test/test-server/bootstrap.js test/test-server",
+    "test-others": "mocha -R spec test/test-others/bootstrap.js test/test-others"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
