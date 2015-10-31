@@ -1,10 +1,11 @@
 var gulp 			= require('gulp'),
 	fs				= require('fs');
+global._				= require('underscore');
 
 /**
  * This is to load project settings
  */
-require('../../app.js');
+global.Project = require('../../config/bootstrap.js')();
 
 /**
  * Loading tasks based on the current environment
