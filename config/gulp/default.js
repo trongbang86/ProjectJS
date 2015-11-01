@@ -24,6 +24,21 @@ var bowerWiredepOptions 	= {
 			}
 		}
 };
+/* Wiredep settings for injecting project's dependencies */
+var appWiredepOptions 	= {
+		bowerJson: require('../app_bower.json'),
+		ignorePath: /(\.\.\/)*(stylesheets|js)\//,
+		includeSelf: true,
+		fileTypes: {
+			html: {
+				block: /(([ \t]*)<!--\s*app_bower:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi,
+				replace: {
+					js: '<script src="/static/js/{{filePath}}"></script>',
+					css: '<link rel="stylesheet" href="/static/stylesheets/{{filePath}}" />'
+				}
+			}
+		}
+};
 
 /* @Inherit */
 module.exports.clean = function(cb){
@@ -37,15 +52,24 @@ module.exports.style = function() {
 		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
 };
 
-/* @Inherit */
-module.exports.bowerWiredep = function() {
+/**
+ * This is a common method for all wiredep tasks
+ * @param wiredepOptions wiredep options
+ * @returns gulp's stream
+ */
+function wiredepFunc(wiredepOptions) {
 	var layoutFiles = _.map(Project.gulp.layoutFiles, function(file) {
 		return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
 	});
 	
 	return gulp.src(layoutFiles).
-				pipe(wiredep(bowerWiredepOptions)).
+				pipe(wiredep(wiredepOptions)).
 				pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
+}
+
+/* @Inherit */
+module.exports.bowerWiredep = function() {
+	return wiredepFunc(bowerWiredepOptions);
 };
 
 /* @Inherit */
@@ -61,3 +85,14 @@ module.exports.copyFrontEndViewsFiles = function() {
 	return gulp.src(Project.gulp.frontEndViewsFolder+'/**/*').
 			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 };
+
+/* @Inherit */
+module.exports.appWiredep = function() {
+	return wiredepFunc(appWiredepOptions);
+}
+
+/* @Inherit */
+module.exports.copyRawJavascriptFiles = function(){
+	return gulp.src(Project.gulp.frontEndJavascript).
+			pipe(gulp.dest(Project.gulp.tmpJavascriptFolder));
+}

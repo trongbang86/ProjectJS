@@ -5,7 +5,8 @@
 			"layout.html"
 		],
 		"frontEndViewsFolder": "frontend/views",
-		"frontEndStyleSheets": "frontend/stylesheets/**.sass",
+		"frontEndStyleSheets": "frontend/stylesheets/**/*{.sass,.css}",
+		"frontEndJavascript": "frontend/js/**/*.js",
 		"tmpFolder": ".tmp",
 		"tmpFrontEndViewsFolder": ".tmp/frontend/views",
 		"tmpVendorFolder": ".tmp/frontend/vendor",

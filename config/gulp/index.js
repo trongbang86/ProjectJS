@@ -21,6 +21,8 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
 
 /**
  * Automatically loading all the tasks to gulp
+ * ******************TASKS*********************
+ * 
  * clean: This cleans out the .tmp folder
  * 
  * style: This compiles sass files. Depending on which environment it's running,
@@ -34,6 +36,10 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * copyBowerFiles: This copies all bower enabled dependencies to temporary folder
  * 
  * copyFrontEndViewsFiles: This copies all views files into tmp folder
+ * 
+ * appWiredep: This injects project's javascripts and css files into layout(s)
+ * 
+ * copyRawJavascriptFiles: This copies all javascript files into tmp folder
  */
 _.each(tasks, function(func, name){
 	gulp.task(name, func);
