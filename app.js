@@ -11,7 +11,7 @@ var app = express();
 global.Project = require('./config/bootstrap.js')(app);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'frontend', 'views'));
+app.set('views', Project.gulp.tmpFrontEndViewsFolder);
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
