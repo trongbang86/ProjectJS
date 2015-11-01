@@ -4,7 +4,8 @@ var del 					= require('del'),
 	gulp 				= require('gulp'),
 	wiredep				= require('wiredep').stream,
 	path					= require('path'),
-	mainBowerFiles		= require('main-bower-files');
+	mainBowerFiles		= require('main-bower-files'),
+	runSequence			= require('run-sequence');
 
 /* Wiredep settings for injecting bower enabled dependencies */
 var bowerWiredepOptions 	= {
@@ -46,7 +47,7 @@ module.exports.clean = function(cb){
 };
 
 /* @Inherit */
-module.exports.style = function() {
+module.exports.stylesheet = function() {
 	return sass(Project.gulp.frontEndStyleSheets).
 		pipe(autoprefixer('last 2 versions')).
 		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
@@ -89,10 +90,30 @@ module.exports.copyFrontEndViewsFiles = function() {
 /* @Inherit */
 module.exports.appWiredep = function() {
 	return wiredepFunc(appWiredepOptions);
-}
+};
 
 /* @Inherit */
-module.exports.copyRawJavascriptFiles = function(){
+module.exports.javascript = function(){
 	return gulp.src(Project.gulp.frontEndJavascript).
 			pipe(gulp.dest(Project.gulp.tmpJavascriptFolder));
 }
+
+/* @Inherit */
+module.exports.server = function(){
+	require('../../bin/www');
+};
+
+/* @Inherit */
+module.exports.wiredep = function(done) {
+	return runSequence('bowerWiredep', 'appWiredep', done);
+}
+
+/* @Inherit */
+module.exports.run = function(done){
+	return runSequence('clean', 
+						['copyBowerFiles', 'copyFrontEndViewsFiles'],
+						['stylesheet', 'javascript'],
+						'wiredep',
+						'server',
+						done);
+};

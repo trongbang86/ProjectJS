@@ -25,7 +25,7 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * 
  * clean: This cleans out the .tmp folder
  * 
- * style: This compiles sass files. Depending on which environment it's running,
+ * stylesheet: This compiles sass files. Depending on which environment it's running,
  * 			it auto-prefixes, concats and
  * 			does all other jobs related to css
  * 			Result is all.css to be used
@@ -33,13 +33,20 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * bowerWiredep: This injects vendor javascripts and css files into layout(s)
  * 			using the bower.json file
  * 
+ * appWiredep: This injects project's javascripts and css files into layout(s)
+ * 
+ * wiredep: this does bowerWiredep and then runs appWiredep
+ * 
  * copyBowerFiles: This copies all bower enabled dependencies to temporary folder
  * 
  * copyFrontEndViewsFiles: This copies all views files into tmp folder
  * 
- * appWiredep: This injects project's javascripts and css files into layout(s)
+ * javascript: This pre-processes all javascript files
  * 
- * copyRawJavascriptFiles: This copies all javascript files into tmp folder
+ * server: This runs the express server
+ * 
+ * run: This does all the pre-processing for javascripts, layouts, etc.
+ * 			and then runs the server
  */
 _.each(tasks, function(func, name){
 	gulp.task(name, func);

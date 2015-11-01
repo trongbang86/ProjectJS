@@ -4,7 +4,7 @@ var	autoprefixer	= require('gulp-autoprefixer'),
 	concat			= require('gulp-concat'),
 	gulp 			= require('gulp');
 
-module.exports.style = function(){
+module.exports.stylesheet = function(){
 	return sass(Project.gulp.frontEndStyleSheets).
 		pipe(autoprefixer('last 2 versions')).
 		pipe(concat('all.css')).
