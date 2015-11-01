@@ -1,6 +1,9 @@
 {
 	"This_is_for_testing": "This_is_for_testing",
 	"gulp": {
+		"layoutFiles": [
+			"layout.html"
+		],
 		"frontEndViewsFolder": "frontend/views",
 		"frontEndStyleSheets": "frontend/stylesheets/**.sass",
 		"tmpFolder": ".tmp",

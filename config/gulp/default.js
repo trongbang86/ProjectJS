@@ -8,7 +8,7 @@ var del 					= require('del'),
 
 /* Wiredep settings for injecting bower enabled dependencies */
 var bowerWiredepOptions 	= {
-		ignorePath: /(\.\.\/){2}bower_components\//,
+		ignorePath: /(\.\.\/)*bower_components\//,
 
 		fileTypes: {
 			html: {
@@ -39,16 +39,20 @@ module.exports.style = function() {
 
 /* @Inherit */
 module.exports.bowerWiredep = function() {
-	var layoutFile = path.join(Project.gulp.frontEndViewsFolder,
-								'layout.html');
-	return gulp.src([layoutFile]).
+	var layoutFiles = _.map(Project.gulp.layoutFiles, function(file) {
+		return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
+	});
+	
+	return gulp.src(layoutFiles).
 				pipe(wiredep(bowerWiredepOptions)).
-				pipe(gulp.dest(Project.gulp.frontEndViewsFolder));
+				pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 };
 
 /* @Inherit */
 module.exports.copyBowerFiles = function() {
-	return gulp.src(mainBowerFiles())
+	return gulp.src(mainBowerFiles(), 
+					{base: path.join(Project.ROOT_FOLDER, 
+							'bower_components')})
 			.pipe(gulp.dest(Project.gulp.tmpVendorFolder));
 };
 
