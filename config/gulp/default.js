@@ -7,12 +7,19 @@ var del 					= require('del'),
 	mainBowerFiles		= require('main-bower-files'),
 	runSequence			= require('run-sequence'),
 	livereload			= require('gulp-livereload'),
-	lrServerPort		= 35729;
+	__lrServerPort__		= 35729;
 
-/* This prefixes all the layout files with the absolute path in the .tmp folder */
+/* This prefixes all the layout files with the absolute 
+ * path in the .tmp folder 
+ * and in the frontend folder
+ */
 var __tmpLayoutFiles__ = _.map(Project.gulp.layoutFiles, function(file) {
 	return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
 });	
+
+var __frontEndLayoutFiles__ = _.map(Project.gulp.layoutFiles, function(file){
+	return path.join(Project.gulp.frontEndViewsFolder, file);
+});
 
 /* Wiredep settings for injecting bower enabled dependencies */
 var bowerWiredepOptions 	= {
@@ -48,18 +55,6 @@ var appWiredepOptions 	= {
 		}
 };
 
-/* @Inherit */
-module.exports.clean = function(cb){
-	return del([Project.gulp.tmpFolder], cb);
-};
-
-/* @Inherit */
-module.exports.stylesheet = function() {
-	return sass(Project.gulp.frontEndStyleSheets).
-		pipe(autoprefixer('last 2 versions')).
-		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
-		pipe(livereload({port: lrServerPort}));
-};
 
 /**
  * This is a common method for all wiredep tasks
@@ -73,6 +68,23 @@ function wiredepFunc(wiredepOptions) {
 				pipe(wiredep(wiredepOptions)).
 				pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 }
+
+/**
+ * GULP TASKS
+ */
+
+/* @Inherit */
+module.exports.clean = function(cb){
+	return del([Project.gulp.tmpFolder], cb);
+};
+
+/* @Inherit */
+module.exports.stylesheet = function() {
+	return sass(Project.gulp.frontEndStyleSheets).
+		pipe(autoprefixer('last 2 versions')).
+		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
+		pipe(livereload({port: __lrServerPort__}));
+};
 
 /* @Inherit */
 module.exports.bowerWiredep = function() {
@@ -90,7 +102,8 @@ module.exports.copyBowerFiles = function() {
 /* @Inherit */
 module.exports.copyFrontEndViewsFiles = function() {
 	return gulp.src(Project.gulp.frontEndViewsFolder+'/**/*').
-			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
+			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder)).
+			pipe(livereload({port: __lrServerPort__}));
 };
 
 /* @Inherit */
@@ -102,17 +115,27 @@ module.exports.appWiredep = function() {
 module.exports.javascript = function(){
 	return gulp.src(Project.gulp.frontEndJavascript).
 			pipe(gulp.dest(Project.gulp.tmpJavascriptFolder)).
-			pipe(livereload({port: lrServerPort}));
-}
+			pipe(livereload({port: __lrServerPort__}));
+};
 
+/* @Inherit */
+module.exports.injectNewJavascript = function(done){
+	return runSequence('javascript', 'wiredep', done);
+};
+
+/* @Inherit */
+module.exports.injectNewStyleSheets = function(done){
+	return runSequence('stylesheet', 'wiredep', done);
+};
 
 /* @Inherit */
 module.exports.watch = function() {
-	livereload.listen({port: lrServerPort});
+	livereload.listen({port: __lrServerPort__});
 
-	gulp.watch(Project.gulp.frontEndJavascript, ['javascript']);
-	gulp.watch(Project.gulp.frontEndStyleSheets, ['stylesheet']);
-}
+	gulp.watch(Project.gulp.frontEndJavascript, ['injectNewJavascript']);
+	gulp.watch(Project.gulp.frontEndStyleSheets, ['injectNewStyleSheets']);
+	gulp.watch(__frontEndLayoutFiles__, ['copyFrontEndViewsFiles']);
+};
 
 /* @Inherit */
 module.exports.server = function(){
