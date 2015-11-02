@@ -47,6 +47,8 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * 
  * run: This does all the pre-processing for javascripts, layouts, etc.
  * 			and then runs the server
+ *
+ * watch: This sets up watch for frontend changes
  */
 _.each(tasks, function(func, name){
 	gulp.task(name, func);

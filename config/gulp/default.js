@@ -5,7 +5,14 @@ var del 					= require('del'),
 	wiredep				= require('wiredep').stream,
 	path					= require('path'),
 	mainBowerFiles		= require('main-bower-files'),
-	runSequence			= require('run-sequence');
+	runSequence			= require('run-sequence'),
+	livereload			= require('gulp-livereload'),
+	lrServerPort		= 35729;
+
+/* This prefixes all the layout files with the absolute path in the .tmp folder */
+var __tmpLayoutFiles__ = _.map(Project.gulp.layoutFiles, function(file) {
+	return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
+});	
 
 /* Wiredep settings for injecting bower enabled dependencies */
 var bowerWiredepOptions 	= {
@@ -50,7 +57,8 @@ module.exports.clean = function(cb){
 module.exports.stylesheet = function() {
 	return sass(Project.gulp.frontEndStyleSheets).
 		pipe(autoprefixer('last 2 versions')).
-		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
+		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
+		pipe(livereload({port: lrServerPort}));
 };
 
 /**
@@ -59,9 +67,7 @@ module.exports.stylesheet = function() {
  * @returns gulp's stream
  */
 function wiredepFunc(wiredepOptions) {
-	var layoutFiles = _.map(Project.gulp.layoutFiles, function(file) {
-		return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
-	});
+	var layoutFiles = __tmpLayoutFiles__;
 	
 	return gulp.src(layoutFiles).
 				pipe(wiredep(wiredepOptions)).
@@ -95,7 +101,17 @@ module.exports.appWiredep = function() {
 /* @Inherit */
 module.exports.javascript = function(){
 	return gulp.src(Project.gulp.frontEndJavascript).
-			pipe(gulp.dest(Project.gulp.tmpJavascriptFolder));
+			pipe(gulp.dest(Project.gulp.tmpJavascriptFolder)).
+			pipe(livereload({port: lrServerPort}));
+}
+
+
+/* @Inherit */
+module.exports.watch = function() {
+	livereload.listen({port: lrServerPort});
+
+	gulp.watch(Project.gulp.frontEndJavascript, ['javascript']);
+	gulp.watch(Project.gulp.frontEndStyleSheets, ['stylesheet']);
 }
 
 /* @Inherit */
@@ -114,6 +130,6 @@ module.exports.run = function(done){
 						['copyBowerFiles', 'copyFrontEndViewsFiles'],
 						['stylesheet', 'javascript'],
 						'wiredep',
-						'server',
+						['server', 'watch'],
 						done);
 };

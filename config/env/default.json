@@ -11,6 +11,8 @@
 		"tmpFrontEndViewsFolder": ".tmp/frontend/views",
 		"tmpVendorFolder": ".tmp/frontend/vendor",
 		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets",
-		"tmpJavascriptFolder": ".tmp/frontend/js"
+		"tmpJavascriptFolder": ".tmp/frontend/js",
+		"tmpJavascript": ".tmp/frontend/js/**/*.js",
+		"tmpStyleSheets": ".tmp/frontend/stylesheets/**/*.css"
 	}
 }
