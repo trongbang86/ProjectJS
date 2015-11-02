@@ -102,8 +102,7 @@ module.exports.copyBowerFiles = function() {
 /* @Inherit */
 module.exports.copyFrontEndViewsFiles = function() {
 	return gulp.src(Project.gulp.frontEndViewsFolder+'/**/*').
-			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder)).
-			pipe(livereload({port: __lrServerPort__}));
+			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 };
 
 /* @Inherit */
