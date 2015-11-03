@@ -60,8 +60,8 @@ module.exports = function(server){
 function __loadModels__(project){
 	project.Models 	= {};
 	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
-		config 		= require(knexfile);
-
+		config 		= require(knexfile)[project.env];
+	
 	var	knex 		= require('knex')(config);
 
 	var bookshelf 	= require('bookshelf')(knex);
