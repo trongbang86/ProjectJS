@@ -96,7 +96,7 @@ function __cloneProperties__(nconf, project) {
  */
 function __loadRoutes__(project, server) {
 	var fs = require('fs');
-	var routesFolder = path.join(project.ROOT_FOLDER, 'routes');
+	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
 	var routeFiles = fs.readdirSync(routesFolder);
 	_.each(routeFiles, function(file){
 		var routeDefinition = require(path.join(routesFolder, file));
