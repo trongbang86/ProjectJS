@@ -7,7 +7,7 @@ var path        = require('path'),
     ROOT_FOLDER = path.join(__dirname, '..'),
     ENV         = process.env.NODE_ENV || 'development';
 
-var migrationDirectory  = ROOT_FOLDER + "/migrations/" + ENV,
+var migrationDirectory  = ROOT_FOLDER + "/migrations",
     settings            = require('./env/' + ENV + '.json').database;
 
 module.exports[ENV] = {
