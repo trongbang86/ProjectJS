@@ -25,9 +25,8 @@ describe('Configuration', function(){
 	
 	it('automatically prefixes ROOT_FOLDER ' +
 			'to any gulp setting ending with Folder', function(){
-		console.log('^' + Project.ROOT_FOLDER, Project.gulp.tmpFolder);
-		expect(new RegExp('^'+Project.ROOT_FOLDER)
-				.test(Project.gulp.tmpFolder)).to.eq(true);
+		expect(Project.gulp.tmpFolder.startsWith(Project.ROOT_FOLDER))
+				.to.eq(true);
 	});
 	
 });
