@@ -42,6 +42,7 @@ module.exports = function(server){
 	__cloneProperties__(nconfInstance, project);
 
 	__loadModels__(project);
+	global.Models = project.Models;
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
@@ -57,7 +58,7 @@ module.exports = function(server){
  *	This loads all the models
  */
 function __loadModels__(project){
-	project.models 	= {};
+	project.Models 	= {};
 	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
 		config 		= require(knexfile);
 
@@ -78,7 +79,7 @@ function __loadModels__(project){
 
 	_.each(modelFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.models[name] = require(file)(bookshelf);
+		project.Models[name] = require(file)(bookshelf);
 	});
 }
 
