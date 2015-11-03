@@ -7,7 +7,6 @@ var del 					= require('del'),
 	mainBowerFiles		= require('main-bower-files'),
 	runSequence			= require('run-sequence'),
 	livereload			= require('gulp-livereload'),
-	shell				= require('gulp-shell'),
 	__lrServerPort__		= 35729;
 
 /* This prefixes all the layout files with the absolute 
