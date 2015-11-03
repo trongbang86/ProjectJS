@@ -1,5 +1,4 @@
 var gulp 		= require('gulp'),
-	shell		= require('gulp-shell'),
 	path		= require('path'),
 	__argv__ 	= require('yargs').argv;
 
