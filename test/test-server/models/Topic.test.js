@@ -5,7 +5,8 @@ describe('Topic', function(){
 		new Models.Topic({description: 'abc'})
 				.save().then(function(topic){
 					expect(topic).to.exist;
-					done();
-				});
+				}).catch(function(error){
+					expect(error).not.to.exist;
+				}).finally(done);
 	});
 })
