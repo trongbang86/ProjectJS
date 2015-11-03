@@ -3,15 +3,21 @@ Knex configuration file for database migration
 Knex is run independently from the project so 
 we have to load project settings manually
 */
-var Project = require('./bootstrap.js')(null);
-var migrationDirectory = Project.ROOT_FOLDER + "/migrations/" + Project.env;
+var path        = require('path'),
+    ROOT_FOLDER = path.join(__dirname, '..'),
+    ENV         = process.env.NODE_ENV || 'development';
 
-module.exports[Project.env] = {
-  client: 'postgresql',
+var migrationDirectory  = ROOT_FOLDER + "/migrations/" + ENV,
+    settings            = require('./env/' + ENV + '.json').database;
+
+module.exports[ENV] = {
+  client: settings.client,
   connection: {
-    database: 'my_db',
-    user:     'username',
-    password: 'password'
+    database: settings.name,
+    user    : settings.username,
+    password: settings.password,
+    host    : settings.host,
+    charset : 'utf8'
   },
   pool: {
     min: 2,

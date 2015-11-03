@@ -1,6 +1,6 @@
 var path 		= require('path'),
-	express		= require('express');
-
+	express		= require('express'),
+	fs 			= require('fs');
 /**
  * This throws error if env === 'default'
  * @param env the value of the current environment
@@ -40,6 +40,8 @@ module.exports = function(server){
 	/* Using nconf to get custom settings for different environments */
 	var nconfInstance = require(__dirname + "/env").call(project);
 	__cloneProperties__(nconfInstance, project);
+
+	__loadModels__(project);
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
@@ -50,6 +52,35 @@ module.exports = function(server){
 
 	return project;
 };
+
+/**
+ *	This loads all the models
+ */
+function __loadModels__(project){
+	project.models 	= {};
+	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
+		config 		= require(knexfile);
+
+	var	knex 		= require('knex')(config);
+
+	var bookshelf 	= require('bookshelf')(knex);
+	var modelFolder = path.join(project.ROOT_FOLDER, 
+						'server', 'models');		
+
+	var modelFiles 	= _.chain(fs.readdirSync(modelFolder))
+						.filter(function(file){
+							return fs.lstatSync(path.join(modelFolder, file)).isFile();
+						})
+						.map(function(file){
+							return path.join(modelFolder, file);
+						})
+						.value();
+
+	_.each(modelFiles, function(file){
+		var name = path.basename(file).replace('.js', ''); //removing the extension too
+		project.models[name] = require(file)(bookshelf);
+	});
+}
 
 /**
  * This sets up settings for server
@@ -95,7 +126,6 @@ function __cloneProperties__(nconf, project) {
  * @param server the server running this project
  */
 function __loadRoutes__(project, server) {
-	var fs = require('fs');
 	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
 	var routeFiles = fs.readdirSync(routesFolder);
 	_.each(routeFiles, function(file){
