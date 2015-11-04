@@ -1,6 +1,7 @@
 var path 		= require('path'),
 	express		= require('express'),
-	fs 			= require('fs');
+	fs 			= require('fs'),
+	_			= require('underscore');
 /**
  * This throws error if env === 'default'
  * @param env the value of the current environment
@@ -14,6 +15,9 @@ function denyDefaultEnv(env) {
 /**
  * This is the heart of the project-specific settings
  * @param server the server running this project
+ * @param returnProject the object to be returned
+ * 				This is used when this bootstrap.js file
+ * 				is called multiple times
  * @return project {}
  *		- env
  *		- ROOT_FOLDER
@@ -25,28 +29,14 @@ function denyDefaultEnv(env) {
  *			- Any models defined under server/models
  *			- __knex__ the instance of knex created for all the models
  */
-module.exports = function(server){
-	console.log('abc');
-	/* Defining global utilities */
-	global._ = require('underscore');
-
+module.exports = function(server, returnProject){
+	
 	/* Setting up all variables */
 	var env = process.env.NODE_ENV || 'development';
 	
 	denyDefaultEnv(env);
 	
-	var project = {};
-
-	/* Defining extra utilities*/
-	project.env = env;
-	project.ROOT_FOLDER = path.join(__dirname, "..");
-
-	/* Using nconf to get custom settings for different environments */
-	var nconfInstance = require(__dirname + "/env").call(project);
-	__cloneProperties__(nconfInstance, project);
-
-	/* Loading models */
-	__loadModels__(project);
+	var project = returnProject || __initialise__(env);
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
@@ -64,6 +54,28 @@ module.exports = function(server){
 
 	return project;
 };
+
+/**
+ * This does the work of defining the project setting object
+ * @param env the current running environment
+ */
+function __initialise__(env){
+	console.log('abc');
+	var project = {};
+
+	/* Defining extra utilities*/
+	project.env = env;
+	project.ROOT_FOLDER = path.join(__dirname, "..");
+	
+	/* Using nconf to get custom settings for different environments */
+	var nconfInstance = require(__dirname + "/env").call(project);
+	__cloneProperties__(nconfInstance, project);
+
+	/* Loading models */
+	__loadModels__(project);
+	
+	return project;
+}
 
 /**
  *	This loads all the models

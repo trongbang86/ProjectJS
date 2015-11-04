@@ -7,8 +7,12 @@ var bodyParser 		= require('body-parser');
 
 var app = express();
 
-//This is the heart of all project-related settings
-global.Project 	= require('./config/bootstrap.js')(app);
+/** This is the heart of all project-related settings
+ *	the global.Project is passed into bootstrap.js to
+ *	avoid loading the Project setting object again.
+ *	This happens when using gulp run
+ */
+global.Project 	= require('./config/bootstrap.js')(app, global.Project);
 global.Models	= Project.Models;
 
 // view engine setup
