@@ -44,6 +44,7 @@ module.exports = function(server){
 	var nconfInstance = require(__dirname + "/env").call(project);
 	__cloneProperties__(nconfInstance, project);
 
+	/* Loading models */
 	__loadModels__(project);
 	global.Models = project.Models;
 	
@@ -109,6 +110,34 @@ function __applyServerSetup__(project, server){
 	server.use('/static/vendor',
 			express.static(project.gulp.tmpVendorFolder));
 	
+	/* Defining hooks when server is shutdown */
+	// listen for TERM signal .e.g. kill 
+	process.on ('SIGTERM', __serverShutdown__(project));
+
+	// listen for INT signal e.g. Ctrl-C
+	process.on ('SIGINT', __serverShutdown__(project)); 
+}
+
+/**
+ * This defines what happens when server is shutdown
+ * @param project the project setting object
+ * @param server the server running
+ */
+function __serverShutdown__(project, server){
+	return function(){
+		console.log('Destroying connection pools used by knex');
+		project.Models.__knex__.destroy(function(){	
+			console.log('Finished destroying connection pools used by knex');
+			console.log('Calling process.exit()');
+			process.exit();
+		});
+
+		setTimeout(function(){
+			console.log('Could not destroy the connection pools on time');
+			console.log('Forcefully shutting down the process');
+			process.exit();
+		}, project.timeOutShutDown);
+	}
 }
 
 /**
@@ -118,8 +147,9 @@ function __applyServerSetup__(project, server){
  * @param project
  */
 function __cloneProperties__(nconf, project) {
-	project.database 	= nconf.get('database');
+	project.database 		= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
+	project.timeOutShutdown	= nconf.get('timeOutShutdown');
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
 	project.denyDefaultEnv = denyDefaultEnv;
