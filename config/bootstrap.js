@@ -21,6 +21,9 @@ function denyDefaultEnv(env) {
  *		- gulp
  *		- denyDefaultEnv
  *		- routes
+ *		- Models
+ *			- Any models defined under server/models
+ *			- __knex__ the instance of knex created for all the models
  */
 module.exports = function(server){
 	/* Defining global utilities */
@@ -63,6 +66,8 @@ function __loadModels__(project){
 		config 		= require(knexfile)[project.env];
 	
 	var	knex 		= require('knex')(config);
+
+	project.Models.__knex__ = knex;
 
 	var bookshelf 	= require('bookshelf')(knex);
 	var modelFolder = path.join(project.ROOT_FOLDER, 
