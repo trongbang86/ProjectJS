@@ -29,4 +29,8 @@ describe('Configuration', function(){
 				.to.eq(true);
 	});
 	
+	it('injects Models and __knex__ into Project', function(){
+		expect(Project.Models).to.exist;
+		expect(Project.Models.__knex__).to.exist;
+	})
 });
