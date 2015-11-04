@@ -8,7 +8,8 @@ var bodyParser 		= require('body-parser');
 var app = express();
 
 //This is the heart of all project-related settings
-global.Project = require('./config/bootstrap.js')(app);
+global.Project 	= require('./config/bootstrap.js')(app);
+global.Models	= Project.Models;
 
 // view engine setup
 app.set('views', Project.gulp.tmpFrontEndViewsFolder);

@@ -26,6 +26,7 @@ function denyDefaultEnv(env) {
  *			- __knex__ the instance of knex created for all the models
  */
 module.exports = function(server){
+	console.log('abc');
 	/* Defining global utilities */
 	global._ = require('underscore');
 
@@ -46,7 +47,6 @@ module.exports = function(server){
 
 	/* Loading models */
 	__loadModels__(project);
-	global.Models = project.Models;
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
