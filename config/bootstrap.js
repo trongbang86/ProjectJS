@@ -6,7 +6,7 @@ var path 		= require('path'),
  * This throws error if env === 'default'
  * @param env the value of the current environment
  */
-function denyDefaultEnv(env) {
+function __denyDefaultEnv__(env) {
 	if (env==='default') {
 		throw Error("Environment can't be set to 'default'");
 	};
@@ -34,7 +34,7 @@ module.exports = function(server, returnProject){
 	/* Setting up all variables */
 	var env = process.env.NODE_ENV || 'development';
 	
-	denyDefaultEnv(env);
+	__denyDefaultEnv__(env);
 	
 	var project = returnProject || __initialise__(env);
 	
@@ -60,7 +60,6 @@ module.exports = function(server, returnProject){
  * @param env the current running environment
  */
 function __initialise__(env){
-	console.log('abc');
 	var project = {};
 
 	/* Defining extra utilities*/
@@ -164,7 +163,7 @@ function __cloneProperties__(nconf, project) {
 	project.timeOutShutdown	= nconf.get('timeOutShutdown');
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
-	project.denyDefaultEnv = denyDefaultEnv;
+	project.__denyDefaultEnv__ = __denyDefaultEnv__;
 }
 
 /**

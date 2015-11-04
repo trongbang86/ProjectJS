@@ -1,3 +1,5 @@
+var path = require('path');
+
 describe('Configuration', function(){
 	it('creates a global variable called project', function(){
 		expect(Project).to.exist;
@@ -10,9 +12,9 @@ describe('Configuration', function(){
 	
 	it("throws Error if 'default' is used as the environment name", function(){
 		expect(function(){
-			var denyDefaultEnv = require('../../config/bootstrap.js').denyDefaultEnv;
+			var denyDefaultEnv = require('../../config/bootstrap.js')(null, Project).__denyDefaultEnv__;
 			expect(denyDefaultEnv).to.exist;
-			denyDefaultEnv('test');
+			denyDefaultEnv('default');
 			
 		}).to.throw(Error);
 	});
@@ -32,5 +34,15 @@ describe('Configuration', function(){
 	it('injects Models and __knex__ into Project', function(){
 		expect(Project.Models).to.exist;
 		expect(Project.Models.__knex__).to.exist;
-	})
+	});
+	
+	it('uses the same Project setting object if '+
+			'passed into bootstrap.js', function(){
+		var fakeProject = {a:'a'};
+		var bootstrapFile = path.join(Project.ROOT_FOLDER, 
+				'config', 'bootstrap.js');
+		
+		var project = require(bootstrapFile)(null, fakeProject);
+		expect(project).to.eq(fakeProject);
+	});
 });
