@@ -55,6 +55,13 @@ module.exports = function(server){
 		__applyServerSetup__(project, server);
 	}
 
+	/* Defining hooks when server is shutdown */
+	// listen for TERM signal .e.g. kill 
+	process.on ('SIGTERM', __shutdown__(project));
+
+	// listen for INT signal e.g. Ctrl-C
+	process.on ('SIGINT', __shutdown__(project)); 
+
 	return project;
 };
 
@@ -110,20 +117,13 @@ function __applyServerSetup__(project, server){
 	server.use('/static/vendor',
 			express.static(project.gulp.tmpVendorFolder));
 	
-	/* Defining hooks when server is shutdown */
-	// listen for TERM signal .e.g. kill 
-	process.on ('SIGTERM', __serverShutdown__(project));
-
-	// listen for INT signal e.g. Ctrl-C
-	process.on ('SIGINT', __serverShutdown__(project)); 
 }
 
 /**
  * This defines what happens when server is shutdown
  * @param project the project setting object
- * @param server the server running
  */
-function __serverShutdown__(project, server){
+function __shutdown__(project){
 	return function(){
 		console.log('Destroying connection pools used by knex');
 		project.Models.__knex__.destroy(function(){	
