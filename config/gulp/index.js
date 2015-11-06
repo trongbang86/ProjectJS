@@ -5,17 +5,17 @@ global._				= require('underscore');
 /**
  * This is to load project settings
  */
-global.Project = require('../../config/bootstrap.js')();
+var Project = require('../../config/bootstrap.js')();
 
 /**
  * Loading tasks based on the current environment
  */
-var defaultTasks = require('./default.js');
+var defaultTasks = require('./default.js')(Project);
 var envSpecTasks = {},
 	envSpecTasksFile = __dirname + '/' + Project.env + '.js';
 
 if(fs.existsSync(envSpecTasksFile)){
-	envSpecTasks = require(envSpecTasksFile);
+	envSpecTasks = require(envSpecTasksFile)(Project);
 }
 var tasks = _.extend({}, defaultTasks, envSpecTasks);
 

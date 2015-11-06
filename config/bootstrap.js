@@ -14,7 +14,7 @@ function __denyDefaultEnv__(env) {
 
 /**
  * This is the heart of the project-specific settings
- * @param server the server running this project
+ * @param serverSettings the server running this project
  * @param returnProject the object to be returned
  * 				This is used when this bootstrap.js file
  * 				is called multiple times
@@ -29,20 +29,27 @@ function __denyDefaultEnv__(env) {
  *			- Any models defined under server/models
  *			- __knex__ the instance of knex created for all the models
  */
-module.exports = function(server, returnProject){
+module.exports = function(serverSettings, returnProject){
 	
+	/* If returnProject is passed in, it means
+	 * the intialisation process has taken earlier
+	 */
+	if(returnProject){
+		return returnProject;
+	}
+
 	/* Setting up all variables */
 	var env = process.env.NODE_ENV || 'development';
 	
 	__denyDefaultEnv__(env);
 	
-	var project = returnProject || __initialise__(env);
+	var project = __initialise__(env);
 	
 	/* if express server is passed in, we set up specific
 	 * settings for the server
 	 */
-	if(server){
-		__applyServerSetup__(project, server);
+	if(serverSettings){
+		__applyServerSetup__(project, serverSettings);
 	}
 
 	/* Defining hooks when server is shutdown */
@@ -82,7 +89,7 @@ function __initialise__(env){
 function __loadModels__(project){
 	project.Models 	= {};
 	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
-		config 		= require(knexfile)[project.env];
+		config 		= require(knexfile)()[project.env];
 	
 	var	knex 		= require('knex')(config);
 
@@ -103,29 +110,29 @@ function __loadModels__(project){
 
 	_.each(modelFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Models[name] = require(file)(bookshelf);
+		project.Models[name] = require(file)(project, bookshelf);
 	});
 }
 
 /**
  * This sets up settings for server
  * @param project the project setting object
- * @param server the server running
+ * @param serverSettings the server running
  */
-function __applyServerSetup__(project, server){
+function __applyServerSetup__(project, serverSettings){
 
 	/* Defining routes */
 	project.routes = {};
-	__loadRoutes__(project, server);
+	__loadRoutes__(project, serverSettings);
 	
 	/* Defining static routes */
-	server.use('/static/js', 
+	serverSettings.use('/static/js', 
 			express.static(project.gulp.tmpJavascriptFolder));
 	
-	server.use('/static/stylesheets',
+	serverSettings.use('/static/stylesheets',
 			express.static(project.gulp.tmpStyleSheetFolder));
 	
-	server.use('/static/vendor',
+	serverSettings.use('/static/vendor',
 			express.static(project.gulp.tmpVendorFolder));
 	
 }
@@ -170,14 +177,14 @@ function __cloneProperties__(nconf, project) {
  * This loads automatically all the routes
  * by looping through routes folder
  * @param project the project setting object
- * @param server the server running this project
+ * @param serverSettings the server running this project
  */
-function __loadRoutes__(project, server) {
+function __loadRoutes__(project, serverSettings) {
 	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
 	var routeFiles = fs.readdirSync(routesFolder);
 	_.each(routeFiles, function(file){
-		var routeDefinition = require(path.join(routesFolder, file));
-		server.use(routeDefinition.base, routeDefinition.router);
+		var routeDefinition = require(path.join(routesFolder, file))(project);
+		serverSettings.use(routeDefinition.base, routeDefinition.router);
 		project.routes[routeDefinition.base] = routeDefinition.router;
 	});
 }

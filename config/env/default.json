@@ -14,6 +14,7 @@
 		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets",
 		"tmpJavascriptFolder": ".tmp/frontend/js",
 		"tmpJavascript": ".tmp/frontend/js/**/*.js",
-		"tmpStyleSheets": ".tmp/frontend/stylesheets/**/*.css"
+		"tmpStyleSheets": ".tmp/frontend/stylesheets/**/*.css",
+		"testServerFolder": "test/test-server"
 	}
 }

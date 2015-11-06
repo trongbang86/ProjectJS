@@ -1,8 +1,15 @@
 var gulp 		= require('gulp'),
 	path		= require('path'),
-	__argv__ 	= require('yargs').argv;
+	__argv__ 	= require('yargs').argv,
+	Project		= null,
+	__tasks__	= {};
+	
+module.exports = function(__Project__){
+	Project = __Project__;
+	return __tasks__;
+}
 
-module.exports.db = function(done){
+__tasks__.db = function(done){
 	console.log('Instructions: \n' +
 		'gulp db --make migration_name \n' +
 		'gulp db --migrate \n' +

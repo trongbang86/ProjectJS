@@ -1,4 +1,4 @@
-module.exports = function(bookshelf){
+module.exports = function(Project, bookshelf){
 	return bookshelf.Model.extend({
 		tableName: 'topic'
 	});
