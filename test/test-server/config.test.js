@@ -9,7 +9,9 @@ describe('Configuration', function(){
 	
 	it("throws Error if 'default' is used as the environment name", function(){
 		expect(function(){
-			var denyDefaultEnv = require('../../config/bootstrap.js')(null, TestProject).__denyDefaultEnv__;
+			var denyDefaultEnv = require('../../config/bootstrap.js')
+									(null, {project: TestProject})
+										.__denyDefaultEnv__;
 			expect(denyDefaultEnv).to.exist;
 			denyDefaultEnv('default');
 			
@@ -39,7 +41,7 @@ describe('Configuration', function(){
 		var bootstrapFile = path.join(TestProject.ROOT_FOLDER, 
 				'config', 'bootstrap.js');
 		
-		var project = require(bootstrapFile)(null, fakeProject);
+		var project = require(bootstrapFile)(null, {project: fakeProject});
 		expect(project).to.eq(fakeProject);
 	});
 });

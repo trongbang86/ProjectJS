@@ -14,10 +14,16 @@ function __denyDefaultEnv__(env) {
 
 /**
  * This is the heart of the project-specific settings
+ * It looks up the environment from process.env.NODE_ENV and 
+ *		sets up all the dependencies accordingly
+ * 
  * @param serverSettings the server running this project
- * @param returnProject the object to be returned
+ * @param options a dictionary to give extra options
+ *		- project: the object to be returned
  * 				This is used when this bootstrap.js file
- * 				is called multiple times
+ * 				is called multiple times.
+ *				If this is given, the initialisation is skipped
+ *		- env: To override the process.env.NODE_ENV
  * @return project {}
  *		- env
  *		- ROOT_FOLDER
@@ -29,17 +35,20 @@ function __denyDefaultEnv__(env) {
  *			- Any models defined under server/models
  *			- __knex__ the instance of knex created for all the models
  */
-module.exports = function(serverSettings, returnProject){
+module.exports = function(serverSettings, options){
 	
-	/* If returnProject is passed in, it means
+	/* To avoid null error */
+	options = options || {};
+
+	/* If project is passed in, it means
 	 * the intialisation process has taken earlier
 	 */
-	if(returnProject){
-		return returnProject;
+	if(options.project){
+		return options.project;
 	}
 
 	/* Setting up all variables */
-	var env = process.env.NODE_ENV || 'development';
+	var env = options.env || process.env.NODE_ENV || 'development';
 	
 	__denyDefaultEnv__(env);
 	
@@ -136,6 +145,7 @@ function __applyServerSetup__(project, serverSettings){
  */
 function shutdown(project){
 	return function(){
+		console.log(project);
 		console.log('Destroying connection pools used by knex');
 		project.Models.__knex__.destroy(function(){	
 			console.log('Finished destroying connection pools used by knex');
