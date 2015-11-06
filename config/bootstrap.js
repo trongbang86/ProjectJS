@@ -52,13 +52,6 @@ module.exports = function(serverSettings, returnProject){
 		__applyServerSetup__(project, serverSettings);
 	}
 
-	/* Defining hooks when server is shutdown */
-	// listen for TERM signal .e.g. kill 
-	process.on ('SIGTERM', __shutdown__(project));
-
-	// listen for INT signal e.g. Ctrl-C
-	process.on ('SIGINT', __shutdown__(project)); 
-
 	return project;
 };
 
@@ -141,21 +134,14 @@ function __applyServerSetup__(project, serverSettings){
  * This defines what happens when server is shutdown
  * @param project the project setting object
  */
-function __shutdown__(project){
+function shutdown(project){
 	return function(){
 		console.log('Destroying connection pools used by knex');
 		project.Models.__knex__.destroy(function(){	
 			console.log('Finished destroying connection pools used by knex');
-			console.log('Calling process.exit()');
-			process.exit();
+			
 		});
-
-		setTimeout(function(){
-			console.log('Could not destroy the connection pools on time');
-			console.log('Forcefully shutting down the process');
-			process.exit();
-		}, project.timeOutShutDown);
-	}
+	};
 }
 
 /**
@@ -168,6 +154,7 @@ function __cloneProperties__(nconf, project) {
 	project.database 		= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
 	project.timeOutShutdown	= nconf.get('timeOutShutdown');
+	project.shutdown 		= shutdown(project);
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
 	project.__denyDefaultEnv__ = __denyDefaultEnv__;

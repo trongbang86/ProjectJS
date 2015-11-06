@@ -59,6 +59,12 @@ serverSettings.use(function(err, req, res, next) {
   });
 });
 
+/* Defining hooks when server is shutdown */
+// listen for TERM signal .e.g. kill 
+process.on ('SIGTERM', Project.shutdown);
+
+// listen for INT signal e.g. Ctrl-C
+process.on ('SIGINT', Project.shutdown); 
 
 module.exports = {
   serverSettings: serverSettings,
