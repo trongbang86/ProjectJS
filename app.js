@@ -12,7 +12,8 @@ var serverSettings = express();
  *	avoid loading the Project setting object again.
  *	This hserverSettingsens when using gulp run
  */
-var Project 	= require('./config/bootstrap.js')(serverSettings);
+var ProjectModule = require('./config/bootstrap.js'),
+    Project 	= ProjectModule(serverSettings);
 
 // view engine setup
 serverSettings.set('views', Project.gulp.tmpFrontEndViewsFolder);
@@ -61,10 +62,14 @@ serverSettings.use(function(err, req, res, next) {
 
 /* Defining hooks when server is shutdown */
 // listen for TERM signal .e.g. kill 
-process.on ('SIGTERM', Project.shutdown);
+process.on ('SIGTERM', function(){
+  ProjectModule.Projects.shutdown(process.exit);
+});
 
 // listen for INT signal e.g. Ctrl-C
-process.on ('SIGINT', Project.shutdown); 
+process.on ('SIGINT', function(){
+  ProjectModule.Projects.shutdown(process.exit);
+}); 
 
 module.exports = {
   serverSettings: serverSettings,

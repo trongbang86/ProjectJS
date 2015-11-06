@@ -1,7 +1,10 @@
 var path 		= require('path'),
 	express		= require('express'),
 	fs 			= require('fs'),
-	_			= require('underscore');
+	_			= require('underscore'),
+	Promise		= require('bluebird'),
+	__AllProjectsShutdownCalled__ = false,
+	Projects 	= [];
 /**
  * This throws error if env === 'default'
  * @param env the value of the current environment
@@ -48,8 +51,9 @@ module.exports = function(serverSettings, options){
 	}
 
 	/* Setting up all variables */
+
 	var env = options.env || process.env.NODE_ENV || 'development';
-	
+
 	__denyDefaultEnv__(env);
 	
 	var project = __initialise__(env);
@@ -61,8 +65,44 @@ module.exports = function(serverSettings, options){
 		__applyServerSetup__(project, serverSettings);
 	}
 
+	/*
+	 * Registering this project instance so that
+	 * we can shut down all connections gracefully
+	 * when exiting
+	 */
+	Projects.push(project);
+
 	return project;
 };
+
+/*
+ * Exposing all the project instances when we do
+ * require('config/bootstrap.js').Projects
+ */
+module.exports.Projects = Projects;
+Projects.shutdown 		= shutdown;
+
+/**
+ * This is used to shut down all project instances
+ */
+function shutdown(){
+	//Only call this for the first time
+	if(!__AllProjectsShutdownCalled__){
+		__AllProjectsShutdownCalled__ = true;
+
+		var shutdownPromises = [];
+		_.each(Projects, function(project){
+			shutdownPromises.push(project.shutdown);
+		});
+
+		Promise.all(shutdownPromises).
+			then(function(){
+				if(cb) {
+					cb();
+				}
+			})
+	}
+}
 
 /**
  * This does the work of defining the project setting object
@@ -140,18 +180,24 @@ function __applyServerSetup__(project, serverSettings){
 }
 
 /**
- * This defines what happens when server is shutdown
+ * This is used to shutdown individual project instance
  * @param project the project setting object
+ * @param cb what next to be done
  */
-function shutdown(project){
-	return function(){
-		console.log(project);
-		console.log('Destroying connection pools used by knex');
-		project.Models.__knex__.destroy(function(){	
-			console.log('Finished destroying connection pools used by knex');
-			
-		});
-	};
+
+function __shutdown__(project){
+
+	return new Promise(function(resolve, reject){
+		console.log('Destroying connection pools used by knex for the environment ' 
+			+ project.env);
+
+		project.Models.__knex__.destroy(function(){
+			console.log('Finished destroying connection pools used by knex' + 
+							' for the environment ' + project.env);
+			resolve();
+		})
+	});
+	
 }
 
 /**
@@ -164,7 +210,7 @@ function __cloneProperties__(nconf, project) {
 	project.database 		= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
 	project.timeOutShutdown	= nconf.get('timeOutShutdown');
-	project.shutdown 		= shutdown(project);
+	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
 	project.__denyDefaultEnv__ = __denyDefaultEnv__;

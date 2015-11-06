@@ -5,7 +5,8 @@ global._				= require('underscore');
 /**
  * This is to load project settings
  */
-var Project = require('../../config/bootstrap.js')();
+var ProjectModule = require('../../config/bootstrap.js'),
+	Project = ProjectModule();
 
 /**
  * Loading tasks based on the current environment
@@ -63,7 +64,11 @@ _.each(tasks, function(func, name){
 
 /* Defining hooks when server is shutdown */
 // listen for TERM signal .e.g. kill 
-process.on ('SIGTERM', Project.shutdown);
+process.on ('SIGTERM', function(){
+  ProjectModule.Projects.shutdown(process.exit);
+});
 
 // listen for INT signal e.g. Ctrl-C
-process.on ('SIGINT', Project.shutdown); 
+process.on ('SIGINT', function(){
+  ProjectModule.Projects.shutdown(process.exit);
+}); 
