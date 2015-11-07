@@ -7,6 +7,7 @@ module.exports = function(){
   all.test = __getSettings__('test');
   all.development = __getSettings__('development');
   all.production = __getSettings__('production');
+  console.log(all);
   return all;
 }
 
@@ -15,7 +16,8 @@ module.exports = function(){
  * @param env the environment name
  */
 function __getSettings__(env){
-  var settings = require('./env/' + env + '.json').database;
+  var nconf     = require('./env').call({env: env});
+  var settings  = nconf.get('database');
   if(settings){
     return {
       client: settings.client,
