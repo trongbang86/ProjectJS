@@ -76,7 +76,7 @@ module.exports = function(serverSettings, options){
 };
 
 /*
- * Exposing all the project instances when we do
+ * Exposing all the project instances which is accessible by
  * require('config/bootstrap.js').Projects
  */
 module.exports.Projects = Projects;
@@ -84,15 +84,16 @@ Projects.shutdown 		= shutdown;
 
 /**
  * This is used to shut down all project instances
+ * @param cb the callback function
  */
-function shutdown(){
+function shutdown(cb){
 	//Only call this for the first time
 	if(!__AllProjectsShutdownCalled__){
 		__AllProjectsShutdownCalled__ = true;
 
 		var shutdownPromises = [];
 		_.each(Projects, function(project){
-			shutdownPromises.push(project.shutdown);
+			shutdownPromises.push(project.shutdown());
 		});
 
 		Promise.all(shutdownPromises).
@@ -186,17 +187,18 @@ function __applyServerSetup__(project, serverSettings){
  */
 
 function __shutdown__(project){
+	return function(){
+		return new Promise(function(resolve, reject){
+			console.log('Destroying connection pools used by knex for the environment ' 
+				+ project.env);
 
-	return new Promise(function(resolve, reject){
-		console.log('Destroying connection pools used by knex for the environment ' 
-			+ project.env);
-
-		project.Models.__knex__.destroy(function(){
-			console.log('Finished destroying connection pools used by knex' + 
-							' for the environment ' + project.env);
-			resolve();
-		})
-	});
+			project.Models.__knex__.destroy(function(){
+				console.log('Finished destroying connection pools used by knex' + 
+								' for the environment ' + project.env);
+				resolve();
+			})
+		});
+	};
 	
 }
 
