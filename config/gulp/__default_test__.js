@@ -13,14 +13,6 @@ module.exports = function(__Project__){
  */
 __tasks__.test = function(){
 
-	/* We have to set the NODE_ENV here because
-	 * the bootstrap process takes place only once
-	 * and gulp is called first
-	 * so the env property is set to 
-	 * 'development' instead of 'test'
-	 */
-	process.env.NODE_ENV = 'test';
-
 	return gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
 						Project.gulp.testServerFolder + '/**/*.js']).
 				pipe(mocha({
