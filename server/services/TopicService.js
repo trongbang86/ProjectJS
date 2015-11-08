@@ -1,9 +1,8 @@
 var Project, Topic, logger;
 
-module.exports = function(Project){
+module.exports = function(__Project__){
 	Project = __Project__;
 	Topic = Project.Models.Topic;
-	console.log('asdf');
 };
 
 module.exports.save = function(fields, cb){

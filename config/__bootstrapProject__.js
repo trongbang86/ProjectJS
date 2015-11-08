@@ -54,7 +54,12 @@ function __loadLogger__(project){
 	var winston = require('winston'),
 		logger 	= new winston.Logger({
 			transports: [
-				new winston.transports.Console(),
+				new winston.transports.Console({
+						level: 'info',
+						json: false,
+						handleExceptions: true,
+	    				humanReadableUnhandledException: true
+				}),
 				new winston.transports.File({
 						filename: path.join(project.appLogFolder, 'app.log'),
 						maxsize: 5000000,
@@ -66,8 +71,7 @@ function __loadLogger__(project){
 
 				})
 			],
-			levels: customLogLevels,
-  			exitOnError: false
+			levels: customLogLevels
 
 		});
 

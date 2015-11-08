@@ -135,10 +135,12 @@ function __getAccessLogStream__(project){
 
 				})
 			],
-			levels: project.customLogLevels,
-			exitOnError: false
+			levels: project.customLogLevels
 		});
-
+	
+	if(project.env === 'production') {	
+		httpLogger.exitOnError = false;
+	}
 
 	return {
 		write: function(str){

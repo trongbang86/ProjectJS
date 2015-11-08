@@ -1,4 +1,5 @@
 var	Promise				= require('bluebird'),
+	_ 					= require('underscore'),
 	__AllProjectsShutdownCalled__ = false,
 	Projects 			= [];
 
