@@ -7,7 +7,6 @@ module.exports = function(){
   all.test = __getSettings__('test');
   all.development = __getSettings__('development');
   all.production = __getSettings__('production');
-  console.log(all);
   return all;
 }
 
