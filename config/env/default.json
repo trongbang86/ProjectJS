@@ -20,5 +20,6 @@
 		"tmpJavascript": ".tmp/frontend/js/**/*.js",
 		"tmpStyleSheets": ".tmp/frontend/stylesheets/**/*.css",
 		"testServerFolder": "test/test-server"
-	}
+	},
+	"port": 3000
 }

@@ -249,6 +249,7 @@ function __cloneProperties__(nconf, project) {
 	project.logFolder 		= path.join(project.rootLogFolder, project.env);
 	project.appLogFolder 	= path.join(project.logFolder, 'app');
 	project.accessLogFolder	= path.join(project.logFolder, 'access');
+	project.port 			= nconf.get('port');
 
 	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);
