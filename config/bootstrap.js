@@ -122,8 +122,60 @@ function __initialise__(env){
 
 	/* Loading models */
 	__loadModels__(project);
+
+	/* Loading logger */
+	__loadLogger__(project);
 	
 	return project;
+}
+
+/**
+ * This loads logger for the project
+ * @param project the project setting object
+ */
+function __loadLogger__(project){
+
+	/* setting custom logger */
+	var customLevels = {
+		error: 1,
+		warn: 2,
+		debug: 3,
+		info: 4,
+		verbose: 5,
+		silly: 6
+	};
+
+	var logFolder = path.join(project.logFolder, project.env);
+
+	/* create log directory if not exist */
+	if(! fs.existsSync(project.logFolder)) {
+		fs.mkdirSync(project.logFolder);
+	}
+
+	if(! fs.existsSync(logFolder) ) {
+		fs.mkdirSync(logFolder);
+	}
+
+	var winston = require('winston'),
+		logger 	= new winston.Logger({
+			transports: [
+				new winston.transports.Console({
+						level: 'info'
+					}),
+				new winston.transports.File({
+					filename: path.join(logFolder, 'app.log'),
+					maxsize: 5000,
+					json: false,
+					level: 'info',
+					json: false
+
+				})
+			],
+			levels: customLevels
+
+		});
+
+	project.logger = logger;
 }
 
 /**
@@ -212,6 +264,8 @@ function __cloneProperties__(nconf, project) {
 	project.database 		= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
 	project.timeOutShutdown	= nconf.get('timeOutShutdown');
+	project.logFolder 		= path.join(project.ROOT_FOLDER, 
+									nconf.get('logFolder'));
 	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */

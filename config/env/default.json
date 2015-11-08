@@ -1,5 +1,6 @@
 {
 	"This_is_for_testing": "This_is_for_testing",
+	"logFolder": "logs",
 	"timeOutShutdown": "10000",
 	"gulp": {
 		"layoutFiles": [
