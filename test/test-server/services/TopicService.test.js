@@ -5,6 +5,7 @@ describe('TopicSerivce', function(){
 		TestProject.Services.TopicService.save({description: 'abc'}, function(err, topic){
 			expect(topic).to.exist;
 			expect(err).not.to.exist;
+			done();
 		});
 	});
 });
