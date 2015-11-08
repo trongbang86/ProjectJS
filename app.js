@@ -27,8 +27,6 @@ serverSettings.use(bodyParser.json());
 serverSettings.use(bodyParser.urlencoded({ extended: false }));
 serverSettings.use(cookieParser());
 
-serverSettings.use(require('connect-livereload'));
-
 // catch 404 and forward to error handler
 serverSettings.use(function(req, res, next) {
   var err = new Error('Not Found');
