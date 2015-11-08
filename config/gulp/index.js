@@ -44,7 +44,7 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * 
  * javascript: This pre-processes all javascript files
  * 
- * server: This runs the express server
+ * server: This runs/restarts the express server
  * 
  * run: This does all the pre-processing for javascripts, layouts, etc.
  * 			and then runs the server

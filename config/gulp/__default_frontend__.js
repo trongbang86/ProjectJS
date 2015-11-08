@@ -1,17 +1,19 @@
 var del 					= require('del'),
 	sass					= require('gulp-ruby-sass'),
 	autoprefixer			= require('gulp-autoprefixer'),
-	gulp 				= require('gulp'),
-	wiredep				= require('wiredep').stream,
+	gulp 					= require('gulp'),
+	wiredep					= require('wiredep').stream,
 	path					= require('path'),
-	mainBowerFiles		= require('main-bower-files'),
-	runSequence			= require('run-sequence'),
-	livereload			= require('gulp-livereload'),
+	mainBowerFiles			= require('main-bower-files'),
+	runSequence				= require('run-sequence'),
+	livereload				= require('gulp-livereload'),
+	spawn					= require('child_process').spawn,
 	__lrServerPort__		= 35729,
 	Project 				= null,
 	__tmpLayoutFiles__		= null,
 	__frontEndLayoutFiles__	= null,
-	__tasks__				= {};
+	__tasks__				= {},
+	server 					= null;
 
 
 module.exports = function(__Project__){
@@ -144,11 +146,16 @@ __tasks__.watch = function() {
 	gulp.watch(Project.gulp.frontEndJavascript, ['injectNewJavascript']);
 	gulp.watch(Project.gulp.frontEndStyleSheets, ['injectNewStyleSheets']);
 	gulp.watch(__frontEndLayoutFiles__, ['copyFrontEndViewsFiles']);
+	gulp.watch(Project.ROOT_FOLDER+'/server/**/*.js', ['server'])
 };
 
 /* @Inherit */
 __tasks__.server = function(){
-	require('../../bin/www');
+	/* If server exists, kill it before spawn a new one */
+	!server || server.kill();
+
+	server = spawn('node', ['bin/www'], {stdio: 'inherit'});
+
 };
 
 /* @Inherit */
