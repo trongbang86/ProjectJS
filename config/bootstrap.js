@@ -1,10 +1,22 @@
-var path 		= require('path'),
-	express		= require('express'),
-	fs 			= require('fs'),
-	_			= require('underscore'),
-	Promise		= require('bluebird'),
+var path 				= require('path'),
+	fs 					= require('fs'),
+	morgan				= require('morgan'),
+	_					= require('underscore'),
+	Promise				= require('bluebird'),
 	__AllProjectsShutdownCalled__ = false,
-	Projects 	= [];
+	Projects 			= [];
+
+
+/* setting custom logger */
+var customLogLevels = {
+	error: 1,
+	warn: 2,
+	debug: 3,
+	info: 4,
+	verbose: 5,
+	silly: 6
+};
+
 /**
  * This throws error if env === 'default'
  * @param env the value of the current environment
@@ -37,6 +49,11 @@ function __denyDefaultEnv__(env) {
  *		- Models
  *			- Any models defined under server/models
  *			- __knex__ the instance of knex created for all the models
+ *		- customLogLevels
+ *		- rootLogFolder
+ *		- logFolder
+ *		- appLogFolder
+ *		- accessLogFolder
  */
 module.exports = function(serverSettings, options){
 	
@@ -62,7 +79,7 @@ module.exports = function(serverSettings, options){
 	 * settings for the server
 	 */
 	if(serverSettings){
-		__applyServerSetup__(project, serverSettings);
+		require('./__bootstrapServer__.js')(project, serverSettings);
 	}
 
 	/*
@@ -135,47 +152,33 @@ function __initialise__(env){
  */
 function __loadLogger__(project){
 
-	/* setting custom logger */
-	var customLevels = {
-		error: 1,
-		warn: 2,
-		debug: 3,
-		info: 4,
-		verbose: 5,
-		silly: 6
-	};
-
-	var logFolder = path.join(project.logFolder, project.env);
-
 	/* create log directory if not exist */
-	if(! fs.existsSync(project.logFolder)) {
-		fs.mkdirSync(project.logFolder);
-	}
-
-	if(! fs.existsSync(logFolder) ) {
-		fs.mkdirSync(logFolder);
-	}
+	fs.existsSync(project.rootLogFolder) || fs.mkdirSync(project.rootLogFolder);
+	fs.existsSync(project.logFolder) || fs.mkdirSync(project.logFolder);
+	fs.existsSync(project.appLogFolder) || fs.mkdirSync(project.appLogFolder);
 
 	var winston = require('winston'),
 		logger 	= new winston.Logger({
 			transports: [
-				new winston.transports.Console({
-						level: 'info'
-					}),
+				new winston.transports.Console(),
 				new winston.transports.File({
-					filename: path.join(logFolder, 'app.log'),
-					maxsize: 5000,
-					json: false,
-					level: 'info',
-					json: false
+						filename: path.join(project.appLogFolder, 'app.log'),
+						maxsize: 5000000,
+						json: false,
+						level: 'info',
+						json: false,
+						handleExceptions: true,
+	    				humanReadableUnhandledException: true
 
 				})
 			],
-			levels: customLevels
+			levels: customLogLevels,
+  			exitOnError: false
 
 		});
 
 	project.logger = logger;
+	project.customLogLevels = customLogLevels;
 }
 
 /**
@@ -210,29 +213,6 @@ function __loadModels__(project){
 }
 
 /**
- * This sets up settings for server
- * @param project the project setting object
- * @param serverSettings the server running
- */
-function __applyServerSetup__(project, serverSettings){
-
-	/* Defining routes */
-	project.routes = {};
-	__loadRoutes__(project, serverSettings);
-	
-	/* Defining static routes */
-	serverSettings.use('/static/js', 
-			express.static(project.gulp.tmpJavascriptFolder));
-	
-	serverSettings.use('/static/stylesheets',
-			express.static(project.gulp.tmpStyleSheetFolder));
-	
-	serverSettings.use('/static/vendor',
-			express.static(project.gulp.tmpVendorFolder));
-	
-}
-
-/**
  * This is used to shutdown individual project instance
  * @param project the project setting object
  * @param cb what next to be done
@@ -264,29 +244,19 @@ function __cloneProperties__(nconf, project) {
 	project.database 		= nconf.get('database');
 	project.gulp			= nconf.get('gulp');
 	project.timeOutShutdown	= nconf.get('timeOutShutdown');
-	project.logFolder 		= path.join(project.ROOT_FOLDER, 
-									nconf.get('logFolder'));
+	project.rootLogFolder 	= path.join(project.ROOT_FOLDER, 
+									nconf.get('rootLogFolder'));
+	project.logFolder 		= path.join(project.rootLogFolder, project.env);
+	project.appLogFolder 	= path.join(project.logFolder, 'app');
+	project.accessLogFolder	= path.join(project.logFolder, 'access');
+
 	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);
 	/* This function is assigned for testing purposes */
 	project.__denyDefaultEnv__ = __denyDefaultEnv__;
 }
 
-/**
- * This loads automatically all the routes
- * by looping through routes folder
- * @param project the project setting object
- * @param serverSettings the server running this project
- */
-function __loadRoutes__(project, serverSettings) {
-	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
-	var routeFiles = fs.readdirSync(routesFolder);
-	_.each(routeFiles, function(file){
-		var routeDefinition = require(path.join(routesFolder, file))(project);
-		serverSettings.use(routeDefinition.base, routeDefinition.router);
-		project.routes[routeDefinition.base] = routeDefinition.router;
-	});
-}
+
 
 /**
  * This loops through the map and prefixes

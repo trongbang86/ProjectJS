@@ -1,6 +1,9 @@
 {
 	"This_is_for_testing": "This_is_for_testing",
-	"logFolder": "logs",
+	"rootLogFolder": "logs",
+	"logFolder": "this_is_replaced_at_run_time: logs/{env}",
+	"appLogFolder": "this_is_replaced_at_run_time: logs/{env}/app",
+	"accessLogFolder": "this_is_replaced_at_run_time: logs/{env}/access",
 	"timeOutShutdown": "10000",
 	"gulp": {
 		"layoutFiles": [
