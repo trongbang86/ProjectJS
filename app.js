@@ -1,7 +1,7 @@
 var express 			= require('express');
 var path 			= require('path');
 var favicon 			= require('serve-favicon');
-var logger 			= require('morgan');
+var httpLogger 			= require('morgan');
 var cookieParser 	= require('cookie-parser');
 var bodyParser 		= require('body-parser');
 
@@ -13,7 +13,8 @@ var serverSettings = express();
  *	This happens when using gulp run
  */
 var ProjectJS = require('./config/bootstrap.js'),
-    Project 	= ProjectJS(serverSettings);
+    Project 	= ProjectJS(serverSettings),
+    logger    = Project.logger;
 
 // view engine setup
 serverSettings.set('views', Project.gulp.tmpFrontEndViewsFolder);
@@ -22,7 +23,7 @@ serverSettings.engine('html', require('hbs').__express);
 
 // uncomment after placing your favicon in /public
 //serverSettings.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-serverSettings.use(logger('dev'));
+serverSettings.use(httpLogger('dev'));
 serverSettings.use(bodyParser.json());
 serverSettings.use(bodyParser.urlencoded({ extended: false }));
 serverSettings.use(cookieParser());
@@ -45,6 +46,7 @@ if (serverSettings.get('env') === 'development') {
       message: err.message,
       error: err
     });
+    logger.debug(err);
   });
 }
 
@@ -56,6 +58,7 @@ serverSettings.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+  logger.debug(err);
 });
 
 /* Defining hooks when server is shutdown */
