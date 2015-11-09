@@ -57,7 +57,7 @@ Just have a quick look into `.gitignore` files, you can find this line `config/e
 ### Model View Controller
 This project follows the MVC architecture with the key directories listed below:
 
-- frontend/views: Where views are defined. The current templating engine being used is [Handlebars](http://handlebarsjs.com/).
+- frontend/views: Where views are defined. The current templating engine being used is [Handlebars].
 - server/models: the model part
 - server/routes: the controller part
 
@@ -72,7 +72,7 @@ This way is used to get an instance of Project and to apply all the setup for se
 This is used when we don't want to create another Project instance but rather reusing the `AnotherProjectInstance` and to apply server settings to the instance `require('express')()` above.
 
 ### The Model in MVC
-After getting an instance of Project setting object, you can access your model by `Project.Models.YourModelName`. The model name is the name of the corresponding file under _server/models_ folder. [BookShelf](http://bookshelfjs.org/) framework is being used for this model layer. In short, BookShelf is a Javascript ORM for Nodejs and is built on top of [Knex](http://knexjs.org/) which handles the connnection pools to database. Knex is built for Postgres, MySQL, MariaDB, SQLite3, and Oracle. Hence, you can switch to any of these DBMS as you wish. The following settings need to be changed accordingly.
+After getting an instance of Project setting object, you can access your model by `Project.Models.YourModelName`. The model name is the name of the corresponding file under _server/models_ folder. [BookShelf] framework is being used for this model layer. In short, BookShelf is a Javascript ORM for Nodejs and is built on top of [Knex] which handles the connnection pools to database. Knex is built for Postgres, MySQL, MariaDB, SQLite3, and Oracle. Hence, you can switch to any of these DBMS as you wish. The following settings need to be changed accordingly.
 
 ```json
 	"database": {
@@ -85,7 +85,7 @@ After getting an instance of Project setting object, you can access your model b
 	}
 ```
 
-You can have access to the underlying knex instance by Project.Models.\_\_knex__. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
+You can have access to the underlying knex instance by `Project.Models.\_\_knex__`. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
 
 ```javascript
 module.exports = function(Project, bookshelf){
@@ -94,4 +94,14 @@ module.exports = function(Project, bookshelf){
 	});
 }
 ```
-[BookShelf](http://bookshelfjs.org) gives plenty of examples on how to extend model definition such as one-to-one, one-to-many relationships.
+[BookShelf] gives plenty of examples on how to extend model definition such as one-to-one, one-to-many relationships.
+
+### The View in MVC
+Views files can be found under _frontend/views_ folder. [Handlebars] is the template engine employed for this project. You can change this by changing the code in `config/__bootstrapServer__.js`. Look for the line `serverSettings.engine('html', require('hbs').__express)`.
+
+<!---
+	Links used in this README.md
+-->
+[Handlebars]: http://handlebarsjs.com
+[Knex]: http://knexjs.org
+[BookShelf]: http://bookshelfjs.org
