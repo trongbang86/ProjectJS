@@ -1,0 +1,1 @@
+This NodeJS project uses MVC architecture with Express underspinning.
