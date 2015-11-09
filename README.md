@@ -19,18 +19,19 @@ This NodeJS project uses MVC architecture with Express underspinning. This can b
 - `npm run test-server`: Just another way of running test.
 
 ### Coding Conventions
-For this project, I'm following general rules/conventions such as __variable__ is a hidden/private variable. The same is applied for naming file. For example, `config/__bootstrapServer__.js` and `config/__bootstrapProject__.js` are not to be used independently but will be called in `config/bootstrap.js`.
+For this project, I'm following general rules/conventions such as `__variable__` is a hidden/private variable. The same is applied for naming file. For example, `config/__bootstrapServer__.js` and `config/__bootstrapProject__.js` are not to be used independently but will be called in `config/bootstrap.js`.
 
 ### Configurations
 All the configuration files are saved under config/env. Depending on which environment you are passing from the command line, it picks up the file with the matching name such as test.json or development.json
 
 #### Loading order
 The following files are used in the same order of setting up the environment.
-1. __{env}__.json
+
+1. \_\_{env}__.json
 2. {env}.json
 3. default.json
 
-In other words, for any given key, it first checks in the __{env}__.json file and then the others. The reason of using `__{env}__.json` file is that developers can put their account username and password there without worrying them being checked into git and shared with others.
+In other words, for any given key, it first checks in the `__{env}__.json` file and then the others. The reason of using `__{env}__.json` file is that developers can put their account username and password there without worrying them being checked into git and shared with others.
 
 Just have a quick look into `.gitignore` files, you can find this line `config/env/__*__.json`.
 
