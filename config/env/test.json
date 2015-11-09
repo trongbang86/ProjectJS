@@ -1,7 +1,7 @@
 {
 	"database": {
 		"client"	: "postgresql",
-		"name"		: "gokien_test",
+		"name"		: "db_test",
 		"host"		: "localhost",
 		"username"	: "postgres",
 		"password"	: "123456"

@@ -62,11 +62,36 @@ This project follows the MVC architecture with the key directories listed below:
 - server/routes: the controller part
 
 ### The Core
-Before going further, let's have a deeper understanding of the core of the project. `config/bootstrap.js` is the heart of this project. There are a number of ways to `require` this module. Given `var ProjectJS= require('config/bootstrap.js')`, we can have:
+Before going further, let's have a deeper understanding of the core of the project. `config/bootstrap.js` is the heart of this project. There are a number of ways to `require` this module. It gives you an instance of Project setting object. The Project setting object has access to all configurations, Models and Services. Given `var ProjectJS= require('config/bootstrap.js')`, we can have:
 
 - `ProjectJS()`
-This way is used when we just want to get an instance Project
+This way is used when we just want to get an instance Project.
 - `ProjectJS(require('express')())`
-This way is used to get an instance of Project and to apply all the setup for server such as where views and routes files are placed, which view engine is used and how logging for http access is done
+This way is used to get an instance of Project and to apply all the setup for server such as where views and routes files are placed, which view engine is used and how logging for http access is done.
 - `ProjectJS(require('express')(), {project: AnotherProjectInstance })`
-This is used when we don't want to create another Project instance but rather reusing the `AnotherProjectInstance` and to apply server settings to the instance `require('express')()`
+This is used when we don't want to create another Project instance but rather reusing the `AnotherProjectInstance` and to apply server settings to the instance `require('express')()` above.
+
+### The Model in MVC
+After getting an instance of Project setting object, you can access your model by `Project.Models.YourModelName`. The model name is the name of the corresponding file under _server/models_ folder. [BookShelf](http://bookshelfjs.org/) framework is being used for this model layer. In short, BookShelf is a Javascript ORM for Nodejs and is built on top of [Knex](http://knexjs.org/) which handles the connnection pools to database. Knex is built for Postgres, MySQL, MariaDB, SQLite3, and Oracle. Hence, you can switch to any of these DBMS as you wish. The following settings need to be changed accordingly.
+
+```json
+	"database": {
+		"client"	: "postgresql",
+		"name"		: "database_name",
+		"host"		: "localhost",
+		"username"	: "postgres",
+		"password"	: "123456"
+
+	}
+```
+
+You can have access to the underlying knex instance by Project.Models.\_\_knex__. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
+
+```javascript
+module.exports = function(Project, bookshelf){
+	return bookshelf.Model.extend({
+		tableName: 'table_name'
+	});
+}
+```
+[BookShelf](http://bookshelfjs.org) gives plenty of examples on how to extend model definition such as one-to-one, one-to-many relationships.
