@@ -99,9 +99,29 @@ module.exports = function(Project, bookshelf){
 ### The View in MVC
 Views files can be found under _frontend/views_ folder. [Handlebars] is the template engine employed for this project. You can change this by changing the code in `config/__bootstrapServer__.js`. Look for the line `serverSettings.engine('html', require('hbs').__express)`.
 
+When you start the server, the express server is configured to look for the views and templates from _.tmp/frontend/views_ instead of the _frontend/views_ folder. The reason is that some pre-processing is required for javascript and css files to be injected before hand. Hence, if you only run `node bin/www`, this pre-processing should have taken place earlier. In order to do that, you can run `gulp` with a proper task to get this done. More on this will be explained later all.
+
+### The Controller in MVC
+Controllers can be found under _server/routes_ folder. A controller file is a node module with Project setting object passed in as a parameter and is supposed to return a dictionary with 2 keys `router` and `base`. It is easier to look into examples.
+
+```javascript
+module.exports = function(Project){
+	var router = require('express').Router();
+	router.get('/path', function(req, res){
+		res.render('aView', {key: '123'});
+	});	
+	return {
+		base: '/parentPath',
+		router: router
+	}
+};
+```
+More on how to define router can be found on [Express API]
+
 <!---
 	Links used in this README.md
 -->
 [Handlebars]: http://handlebarsjs.com
 [Knex]: http://knexjs.org
 [BookShelf]: http://bookshelfjs.org
+[Express API]: http://expressjs.com/api.html
