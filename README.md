@@ -169,6 +169,7 @@ Still why do we need to have an instance of Project setting object for gulp? The
 
 ### Structure
 There are 2 levels defining gulp tasks.
+
 1. _config/gulp/{{env}}.js_
 2. _config/gulp/default.js
 
