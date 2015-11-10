@@ -171,7 +171,7 @@ Still why do we need to have an instance of Project setting object for gulp? The
 There are 2 levels defining gulp tasks.
 
 1. _config/gulp/{{env}}.js_
-2. _config/gulp/default.js
+2. _config/gulp/default.js_
 
 Anything defined in the _config/gulp/{{env}}.js_ will override the one in _config/gulp/default.js_. It's not advisable to define tasks in _config/gulp/index.js_. To define a new gulp task, consider where you want to put it in the 2 files above and following is what you should do.
 
