@@ -35,10 +35,43 @@ var customLogLevels = {
 
 	/* Loading services */
 	__loadServices__(project);
+
+	/* Loading helpers */
+	__loadHelpers__(project);
 	
 	return project;
 
 };
+
+/**
+ * This loads all the helpers
+ * @param project the project setting object
+ */
+function __loadHelpers__(project){
+	var helpers = project.Helpers = {};
+	var wrench = require('wrench');
+	var helperFolder = path.join(project.ROOT_FOLDER, 
+								'server', 'helpers');
+	var helperFiles = wrench.readdirSyncRecursive(helperFolder);
+
+	_.each(helperFiles, function(file){
+		var components = file.split(path.sep); // ['path1', 'path2', 'file.js']
+		var folders	= components.slice(0, components.length -1); // ['path1', 'path2']
+		var fileName = components[components.length - 1];
+		var ext = path.extname(fileName).substring(1);
+		if(ext === 'js'){
+			var currModule = helpers;
+			_.each(folders, function(folder){
+				if (! currModule[folder]) {
+					currModule[folder] = {};
+				}
+				currModule= currModule[folder];
+			});
+			var customMethods = require(path.join(helperFolder, file))(project);
+			_.extend(currModule, customMethods);
+		}
+	});
+}
 
 /**
  * This loads logger for the project

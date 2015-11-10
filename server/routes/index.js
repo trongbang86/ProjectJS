@@ -1,15 +1,13 @@
 var express 	= require('express'),
-	router 		= express.Router(),
-	Project		= null;
+	router 		= express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
-module.exports = function(__Project__){
-	Project = __Project__;
+
+module.exports = function(Project){
 	
+	/* GET home page. */
+	router.get('/', Project.Helpers.controllers.homepage);
+
 	return {
 		router 	: router,
 		base	: '/'
