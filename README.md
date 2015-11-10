@@ -116,7 +116,48 @@ module.exports = function(Project){
 	}
 };
 ```
-More on how to define router can be found on [Express API]
+With the above code, a `GET /parentPath/path` request will render the view `aView.html` under _frontend/views_ folder. You can access the services and models with Project.Services and Project.Models respectively. More on how to define router can be found on [Express API].
+
+### Services
+You can define your services under _server/services_ and then access it with Project.Services.YourServiceName. The name of the service will be the corresponding file's name. Following code is to show how a service can be defined.
+
+```javascript
+module.exports = function(Project){
+	var Topic = Project.Models.Topic;
+	return {
+		customMethod: function(fields, cb) {
+			Topic.save(fields).
+				then(function(topic){
+					cb && cb(null, topic);
+				}).
+				catch(function(error){
+					cb && cb(error, null);
+				});
+		}
+	}
+}
+```
+
+### Best Practices
+Following are only suggestions how we can structure projects to promote reusability and code quality.
+
+#### 1. Don't use your Model directly in the controller
+Yet for simple code, it's not always necessary to use a service. However, you typically happen to have code that requires access to a few different models before rendering the result to the user. Hence, it makes sense to keep all the logic in your services and reuse them accross the application.
+
+#### 2. Don't litter the routes
+After your application reaches a certain size, your routes might end up with more than hundreds lines of code to define routes with this implementation `function(req, res){}`. What you can actually do is to create sub folders under _server/routes_ to keep the logic. For example, we can have a sub folder _server/routes/user_ to have all the javascript code related to user module and then require it.
+
+```javascript
+var func = require('./users/index.js');
+
+router.get('/path1', func.path1);
+router.get('/path2', func.path2);
+router.get('/path3', func.path3);
+router.get('/path4', func.path4);
+router.get('/path4', func.path5);
+router.get('/path6', func.path6);
+
+```
 
 <!---
 	Links used in this README.md
