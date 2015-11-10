@@ -159,6 +159,42 @@ router.get('/path6', func.path6);
 
 ```
 
+## CUSTOMISATION
+This part explains how the gulp tasks are defined. After this, you can have a better understanding of the Project setting object and then be able to create more interesting code with your application.
+
+### Behind The Scene
+When you run `gulp run`, it brings up the server. For this to happen, we actually have 2 instances of Project setting object. One is used by gulp process. The other one is used by our application which is injected for all Models, Services and Routes as explained earlier. Hence, when you shut down the process. You will see 2 instances of database connections powered by [Knex] are closed at the end. It's also arguable why we need database connections for gulp tasks. It's actually up to your creativity. You can disable this behaviour.
+
+Still why do we need to have an instance of Project setting object for gulp? The answer is that a single place of loading configuration is always a good ideas. With the initialisation of the Project setting objects, we can use the same settings for both gulp tasks and the application code.
+
+### Structure
+There are 2 levels defining gulp tasks.
+1. _config/gulp/{{env}}.js_
+2. _config/gulp/default.js
+
+Anything defined in the _config/gulp/{{env}}.js_ will override the one in _config/gulp/default.js_. It's not advisable to define tasks in _config/gulp/index.js_. To define a new gulp task, consider where you want to put it in the 2 files above and following is what you should do.
+
+```javascript
+//For example, this is default.js
+
+var	gulp 			= require('gulp'),
+	Project			= null,
+	__tasks__		= {};
+
+module.exports = function(__Project__){
+	Project = __Project__;
+	return __tasks__;
+}
+
+__tasks__.stylesheet = function(){
+	return sass(Project.gulp.frontEndStyleSheets).
+		//... other code
+		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
+};
+```
+
+With this, you will have a gulp task named `stylesheet`. Hence, you can run `gulp stylesheet` in the console.
+
 <!---
 	Links used in this README.md
 -->
