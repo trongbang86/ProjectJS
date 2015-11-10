@@ -85,7 +85,7 @@ After getting an instance of Project setting object, you can access your model b
 	}
 ```
 
-You can have access to the underlying knex instance by `Project.Models.\_\_knex__`. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
+You can have access to the underlying knex instance by `Project.Models.__knex__`. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
 
 ```javascript
 module.exports = function(Project, bookshelf){
@@ -158,6 +158,40 @@ router.get('/path4', func.path5);
 router.get('/path6', func.path6);
 
 ```
+
+That is even easier if you define your methods as helper functions which will be addressed next.
+
+### Helpers
+Helpers can be accessed by calling `Project.Helpers.{{subFolder}}.{{yourHelperMethod}}`. There are different ways of writing helpers. As an example, we will use helpers to define our controller code.
+
+```javascript
+// File: helpers/controllers/index.js
+module.exports = function(Project){
+	return {
+		homepage: function(req, res, next) {
+		  res.render('index', { title: 'Express' });
+		}
+	}
+}
+
+```
+
+and then use it to define the homepage route.
+
+```javascript
+module.exports = function(Project){
+	
+	/* GET home page. */
+	router.get('/', Project.Helpers.controllers.homepage);
+
+	return {
+		router 	: router,
+		base	: '/'
+	};
+};
+```
+
+Notice the way we call our `homepage` method which is `Project.Helpers.controllers.homepage` not ~~`Project.Helpers.controllers.index.homepage`~~. Hence, the filename doesn't matter here. It will only copy all the methods from all the files under _server/helpers/controllers_ folder to the object `Project.Helpers.controllers`. Since you got a hold of the route function, you can do unit testing for the method.
 
 ## CUSTOMISATION
 This part explains how the gulp tasks are defined. After this, you can have a better understanding of the Project setting object and then be able to create more interesting code with your application.
