@@ -1,3 +1,30 @@
+**Table of Contents**
+
+- [SUMMARY](#)
+- [WHERE TO START](#)
+	- [Prerequisites](#)
+	- [Commands](#)
+	- [Coding Conventions](#)
+	- [Configurations](#)
+		- [Loading order](#)
+		- [Special Cases](#)
+- [SYSTEM ARCHITECTURE](#)
+	- [Model View Controller](#)
+	- [The Core](#)
+	- [The Model in MVC](#)
+	- [The View in MVC](#)
+	- [The Controller in MVC](#)
+	- [Services](#)
+	- [Best Practices](#)
+		- [1. Don't use your Model directly in the controller](#)
+		- [2. Don't litter the routes](#)
+	- [Helpers](#)
+- [CUSTOMISATION](#)
+	- [Behind The Scene](#)
+	- [Gulp](#)
+		- [Structure](#)
+		- [How To Find A Task](#)
+
 ## SUMMARY
 This NodeJS project uses MVC architecture with Express underspinning. This can be used as a boilerplate to start a new NodeJS project.
 
@@ -298,6 +325,19 @@ To have a good controll on gulp tasks, all the definitions of them are kept in _
 
 As you can see, the tasks are grouped to different environments. Their implementation can be found in the corresponding file such as _config/gulp/development.js_ or _config/gulp/production.js_. As a reminder, it's good to follow the same convention so that the code can be more maintainable.
 
+## TESTING
+Currently [MochaJS] is being used to do testing. All the server testing can be found under _test/test-sever_ folder. The difference between _test-server_ and _test-other_ is that the Project setting object is created before hand for _test-server_ which can be found in _test/test-server/bootstrap.js_. Doing that helps all the test cases share the same database connection and the NODE_ENV is set to test for them. For _test-other_, you can get the Project setting object at will and shut it down when you're finished. For unit testing such as controllers, if you follow the structure describe in [Helpers](#) section, you can gain access to the controller function such as `homepage` by calling `Project.Helpers.controllers.homepage` which returns a function and you can mock the request and response parameters to pass in.
+
+## PRODUCTION
+It's desirable to not use gulp to start up the server even though it's possible. If gulp is used, it means there will be 2 processes running at the same time. One is the gulp process and the other is your web application. In order to bring up the server in production, there are 3 steps.
+
+1. Database Migration
+Make sure that the database schema in production is updated by running `NODE_ENV=production gulp db --migrate`.
+2. Pre-processing static content
+Javascript, stylesheet and view layout files can be processed and placed under _.tmp_ folder correctly by running `NODE_ENV=production gulp prepare`.
+3. Run the server
+You can bring up the server by running `NODE_ENV=production node bin/www` from the root of your project's folder.
+
 <!---
 	Links used in this README.md
 -->
@@ -305,3 +345,4 @@ As you can see, the tasks are grouped to different environments. Their implement
 [Knex]: http://knexjs.org
 [BookShelf]: http://bookshelfjs.org
 [Express API]: http://expressjs.com/api.html
+[MochaJS]: https://mochajs.org
