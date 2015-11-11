@@ -11,7 +11,7 @@
 		],
 		"frontEndViewsFolder": "frontend/views",
 		"frontEndStyleSheets": "frontend/stylesheets/**/*{.sass,.css}",
-		"frontEndJavascript": "frontend/js/**/*.js",
+		"frontEndJavascript": ["frontend/js/**/*.js"],
 		"tmpFolder": ".tmp",
 		"tmpFrontEndViewsFolder": ".tmp/frontend/views",
 		"tmpVendorFolder": ".tmp/frontend/vendor",
@@ -19,6 +19,13 @@
 		"tmpJavascriptFolder": ".tmp/frontend/js",
 		"tmpJavascript": ".tmp/frontend/js/**/*.js",
 		"tmpStyleSheets": ".tmp/frontend/stylesheets/**/*.css",
+		"tmpVendorStyleSheets": ".tmp/frontend/vendor/**/*.css",
+		"tmpVendorJavascript": [
+			".tmp/frontend/vendor/**/jquery.js",
+			".tmp/frontend/vendor/**/bootstrap.js",
+			".tmp/frontend/vendor/**/angular.js",
+			".tmp/frontend/vendor/**/*.js"
+		],
 		"testServerFolder": "test/test-server"
 	},
 	"port": 3000
