@@ -1,34 +1,15 @@
 var del 					= require('del'),
-	sass					= require('gulp-ruby-sass'),
-	autoprefixer			= require('gulp-autoprefixer'),
 	gulp 					= require('gulp'),
-	wiredep					= require('wiredep').stream,
 	path					= require('path'),
 	mainBowerFiles			= require('main-bower-files'),
-	runSequence				= require('run-sequence'),
-	livereload				= require('gulp-livereload'),
 	spawn					= require('child_process').spawn,
-	__lrServerPort__		= 35729,
 	Project 				= null,
-	__tmpLayoutFiles__		= null,
-	__frontEndLayoutFiles__	= null,
 	__tasks__				= {},
 	server 					= null;
 
 
 module.exports = function(__Project__){
 	Project = __Project__;
-	/* This prefixes all the layout files with the absolute 
-	 * path in the .tmp folder 
-	 * and in the frontend folder
-	 */
-	__tmpLayoutFiles__ = _.map(Project.gulp.layoutFiles, function(file) {
-		return path.join(Project.gulp.tmpFrontEndViewsFolder, file);
-	});	
-
-	__frontEndLayoutFiles__ = _.map(Project.gulp.layoutFiles, function(file){
-		return path.join(Project.gulp.frontEndViewsFolder, file);
-	});
 
 	return __tasks__;
 }
