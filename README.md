@@ -24,6 +24,8 @@
 	- [Gulp](#)
 		- [Structure](#)
 		- [How To Find A Task](#)
+- [TESTING](#)
+- [PRODUCTION](#)
 
 ## SUMMARY
 This NodeJS project uses MVC architecture with Express underspinning. This can be used as a boilerplate to start a new NodeJS project.
