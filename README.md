@@ -16,7 +16,7 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 
 - `npm install`: This installs all the node dependencies. This should be run before the other commands.
 - `bower install`: This installs bower components.
-- `gulp run`: This starts up the server. You can then open http://localhost:3000.
+- `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000.
 - `gulp test`: This is supposed to run all the test cases.
 - `gulp db`: This does all the database migration jobs. All available options are below:
 
@@ -100,6 +100,45 @@ module.exports = function(Project, bookshelf){
 Views files can be found under _frontend/views_ folder. [Handlebars] is the template engine employed for this project. You can change this by changing the code in `config/__bootstrapServer__.js`. Look for the line `serverSettings.engine('html', require('hbs').__express)`.
 
 When you start the server, the express server is configured to look for the views and templates from _.tmp/frontend/views_ instead of the _frontend/views_ folder. The reason is that some pre-processing is required for javascript and css files to be injected before hand. Hence, if you only run `node bin/www`, this pre-processing should have taken place earlier. In order to do that, you can run `gulp` with a proper task to get this done. More on this will be explained later all.
+
+Some gulp tasks placeholders are used in the _frontend/views/layout.html_ and will be replaced as part of the processing.
+
+```html
+	<!-- build:css /static/stylesheets/all.css -->
+		<!-- bower:css -->
+		<!-- endbower -->
+
+		<!-- app_bower:css -->
+		<!-- endbower -->
+
+	<!-- endbuild -->
+
+	<!-- build:js /static/js/all.js -->
+		<!-- bower:js -->
+		<!-- endbower -->
+
+		<!-- app_bower:js -->
+		<!-- endbower -->
+	<!-- endbuild -->
+```
+
+The section `bower:css` is used to inject css files of the bower components defined in bower.json. The section `app_bower:css` is used to inject project specific css files which are defined in _config/app_bower.json_. The same is applied for `bower:js` and `app_bower:js` for javascript files. The section `build:css` and `build:js` are the last piece of the masterpiece. They are used to look up for the files vendor.css, project.css, vendor.js and project.js and put references to them into the layout file(s).
+
+Please be advised the order of javascript for both vendor and project can be defined in _config/app_bower.json_. An example of the file is below:
+
+```json
+{
+	"name": "gokien",
+  	"main": [
+		".tmp/frontend/js/angular/modules/*.js",
+		".tmp/frontend/js/angular/services/*.js",
+		".tmp/frontend/js/angular/directives/*.js",
+		".tmp/frontend/js/angular/controllers/*.js",
+		".tmp/frontend/js/**/*.js",
+		".tmp/frontend/stylesheets/**/*.css"
+  	]
+}
+```
 
 ### The Controller in MVC
 Controllers can be found under _server/routes_ folder. A controller file is a node module with Project setting object passed in as a parameter and is supposed to return a dictionary with 2 keys `router` and `base`. It is easier to look into examples.
@@ -201,7 +240,9 @@ When you run `gulp run`, it brings up the server. For this to happen, we actuall
 
 Still why do we need to have an instance of Project setting object for gulp? The answer is that a single place of loading configuration is always a good ideas. With the initialisation of the Project setting objects, we can use the same settings for both gulp tasks and the application code.
 
-### Structure
+### Gulp
+
+#### Structure
 There are 2 levels defining gulp tasks.
 
 1. _config/gulp/{{env}}.js_
@@ -229,6 +270,33 @@ __tasks__.stylesheet = function(){
 ```
 
 With this, you will have a gulp task named `stylesheet`. Hence, you can run `gulp stylesheet` in the console.
+
+#### How To Find A Task
+To have a good controll on gulp tasks, all the definitions of them are kept in _config/gulp/index.js_ and the task itself only has javascript documtation like `/* @Inherit */`. Let's have a look at the _index.js_ file.
+
+```javascript
+/**
+ * Automatically loading all the tasks to gulp
+ * ******************TASKS*********************
+ *
+ * **********DEFAULT***********
+ * clean: This cleans out the .tmp folder
+ * .....Some other tasks.......
+ *
+ * **********DEVELOPMENT***********
+ * server: This runs/restarts the express server
+ * .....Some other tasks.......
+ *
+ * **********PRODUCTION***********
+ *
+ * prepare: This does all the pre-processing such as javascript, stylesheets
+ *			but it doesn't run the server
+ * .....Some other tasks.......
+ *
+ */
+```
+
+As you can see, the tasks are grouped to different environments. Their implementation can be found in the corresponding file such as _config/gulp/development.js_ or _config/gulp/production.js_. As a reminder, it's good to follow the same convention so that the code can be more maintainable.
 
 <!---
 	Links used in this README.md
