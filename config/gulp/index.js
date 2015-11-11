@@ -38,6 +38,11 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * 
  * javascript: This pre-processes all javascript files
  *
+ * test: This runs all the test
+ *
+ * testServer: This runs test/test-server
+ *
+ * testOthers: This runs test/test-others
  *
  * **********DEVELOPMENT***********
  * bowerWiredep: This injects vendor javascripts and css files into layout(s)

@@ -26,7 +26,8 @@
 			".tmp/frontend/vendor/**/angular.js",
 			".tmp/frontend/vendor/**/*.js"
 		],
-		"testServerFolder": "test/test-server"
+		"testServerFolder": "test/test-server",
+		"testOthersFolder": "test/test-others"
 	},
 	"port": 3000
 }

@@ -1,9 +1,20 @@
-var path = require('path');
+var path 	= require('path'),
+	fs 		= require('fs');
 
 describe('Configuration', function(){
 	
 	it('loads different database connections depending on the environment', function(){
-		var testConfig = require('../../config/env/test.json');
+		var testConfigFile 	= null,
+			envFolder		= TestProject.ROOT_FOLDER + '/config/env' ;
+		if(fs.existsSync(envFolder + '/test.json')){
+			testConfigFile = envFolder + '/test.json';
+		}
+
+		if(fs.existsSync(envFolder + '/__test__.json')){
+			testConfigFile = envFolder + '/__test__.json';
+		}
+		console.log(testConfigFile);
+		var testConfig = require(testConfigFile);
 		expect(TestProject.database.name).to.eq(testConfig.database.name);
 	});
 	
