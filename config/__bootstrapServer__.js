@@ -47,9 +47,10 @@ module.exports = function (project, serverSettings){
 
 	// catch 404 and forward to error handler
 	serverSettings.use(function(req, res, next) {
-	  var err = new Error('Not Found');
-	  err.status = 404;
-	  next(err);
+		var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+		var err = new Error('Not Found:'+fullUrl);
+		err.status = 404;
+		next(err);
 	});
 
 	// error handlers
