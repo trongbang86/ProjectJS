@@ -7,13 +7,11 @@ var del 					= require('del'),
 	mainBowerFiles			= require('main-bower-files'),
 	runSequence				= require('run-sequence'),
 	livereload				= require('gulp-livereload'),
-	spawn					= require('child_process').spawn,
 	__lrServerPort__		= 35729,
 	Project 				= null,
 	__tmpLayoutFiles__		= null,
 	__frontEndLayoutFiles__	= null,
-	__tasks__				= {},
-	server 					= null;
+	__tasks__				= {};
 
 module.exports = function(__Project__){
 	Project = __Project__;

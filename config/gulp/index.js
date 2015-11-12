@@ -44,6 +44,8 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  *
  * testOthers: This runs test/test-others
  *
+ * testE2e: This runs test/test-e2e using Protractor
+ *
  * **********DEVELOPMENT***********
  * bowerWiredep: This injects vendor javascripts and css files into layout(s)
  * 			using the bower.json file
