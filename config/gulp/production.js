@@ -113,8 +113,8 @@ __tasks__.wiredep = function() {
 __tasks__.productionBuild = function(){
 	return gulp.src(__tmpLayoutFiles__).
 			pipe(usemin({
-				css: [concat(Project.gulp.tmpStyleSheetFolder+'/all.css')],
-				js: [rename(Project.gulp.tmpJavascriptFolder+'/all.js')]
+				css: [concat('../stylesheets/all.css')],
+				js: [rename('../js/all.js')]
 			})).
 			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 };
