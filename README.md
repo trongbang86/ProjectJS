@@ -333,11 +333,14 @@ Currently [MochaJS] is being used to do testing. All the server testing can be f
 ## PRODUCTION
 It's desirable to not use gulp to start up the server even though it's possible. If gulp is used, it means there will be 2 processes running at the same time. One is the gulp process and the other is your web application. In order to bring up the server in production, there are 3 steps.
 
-1. Database Migration
+1. Install all prerequisite libraries
+- `npm install`
+- `bower install`
+2. Database Migration
 Make sure that the database schema in production is updated by running `NODE_ENV=production gulp db --migrate`.
-2. Pre-processing static content
+3. Pre-processing static content
 Javascript, stylesheet and view layout files can be processed and placed under _.tmp_ folder correctly by running `NODE_ENV=production gulp prepare`.
-3. Run the server
+4. Run the server
 You can bring up the server by running `NODE_ENV=production node bin/www` from the root of your project's folder.
 
 <!---
