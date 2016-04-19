@@ -354,5 +354,5 @@ You can bring up the server by running `NODE_ENV=production node bin/www` from t
 [BookShelf]: http://bookshelfjs.org
 [Express API]: http://expressjs.com/api.html
 [MochaJS]: https://mochajs.org
-[NPM Debug](https://www.npmjs.com/package/debug)
-[NPM Winston](https://www.npmjs.com/package/winston)
+[NPM Debug]: https://www.npmjs.com/package/debug
+[NPM Winston]: https://www.npmjs.com/package/winston
