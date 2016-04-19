@@ -261,6 +261,9 @@ module.exports = function(Project){
 
 Notice the way we call our `homepage` method which is `Project.Helpers.controllers.homepage` not ~~`Project.Helpers.controllers.index.homepage`~~. Hence, the filename doesn't matter here. It will only copy all the methods from all the files under _server/helpers/controllers_ folder to the object `Project.Helpers.controllers`. Since you got a hold of the route function, you can do unit testing for the method.
 
+### Logging
+There are 2 types of logging. One is [NPM Debug] and the other is [NPM Winston]. The differences are only when they are used in. In this project, [NPM Debug] is used for logging all the setup including server ports, entering/exiting a function because of its simplicity whereas [NPM Winston] is used after the project settings have been loaded such as controllers' logging, services' logging. Also [NPM Winston] has been used for file logging.
+
 ## CUSTOMISATION
 This part explains how the gulp tasks are defined. After this, you can have a better understanding of the Project setting object and then be able to create more interesting code with your application.
 
@@ -334,8 +337,8 @@ Currently [MochaJS] is being used to do testing. All the server testing can be f
 It's desirable to not use gulp to start up the server even though it's possible. If gulp is used, it means there will be 2 processes running at the same time. One is the gulp process and the other is your web application. In order to bring up the server in production, there are 3 steps.
 
 1. Install all prerequisite libraries
-- `npm install`
-- `bower install`
+ - `npm install`
+ - `bower install`
 2. Database Migration
 Make sure that the database schema in production is updated by running `NODE_ENV=production gulp db --migrate`.
 3. Pre-processing static content
@@ -351,3 +354,5 @@ You can bring up the server by running `NODE_ENV=production node bin/www` from t
 [BookShelf]: http://bookshelfjs.org
 [Express API]: http://expressjs.com/api.html
 [MochaJS]: https://mochajs.org
+[NPM Debug](https://www.npmjs.com/package/debug)
+[NPM Winston](https://www.npmjs.com/package/winston)

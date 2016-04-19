@@ -1,3 +1,5 @@
+var debug				= require('debug')('ProjectJS');
+
 var	Promise				= require('bluebird'),
 	_ 					= require('underscore'),
 	__AllProjectsShutdownCalled__ = false,
@@ -43,7 +45,7 @@ function __denyDefaultEnv__(env) {
  *		- accessLogFolder
  */
 module.exports = function(serverSettings, options){
-	
+	debug('Entering bootstrap.js');
 	/* To avoid null error */
 	options = options || {};
 
@@ -51,12 +53,15 @@ module.exports = function(serverSettings, options){
 	 * the intialisation process has taken earlier
 	 */
 	if(options.project){
+		debug('Stop doing any further setup because' + 
+				' options.project is not null');
 		return options.project;
 	}
 
 	/* Setting up all variables */
 
 	var env = options.env || process.env.NODE_ENV || 'development';
+	debug('Current env variable is set to %s', env);
 
 	__denyDefaultEnv__(env);
 	
@@ -69,6 +74,7 @@ module.exports = function(serverSettings, options){
 	 * settings for the server
 	 */
 	if(serverSettings){
+		debug('Calling bootstrap for server');
 		require('./__bootstrapServer__.js')(project, serverSettings);
 	}
 
@@ -77,6 +83,7 @@ module.exports = function(serverSettings, options){
 	 * we can shut down all connections gracefully
 	 * when exiting
 	 */
+	debug('Register a new project into Projects array');
 	Projects.push(project);
 
 	return project;
