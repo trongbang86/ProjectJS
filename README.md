@@ -8,6 +8,7 @@
 	- [Configurations](#)
 		- [Loading order](#)
 		- [Special Cases](#)
+		- [Server Port](#)
 - [SYSTEM ARCHITECTURE](#)
 	- [Model View Controller](#)
 	- [The Core](#)
@@ -80,6 +81,18 @@ Just have a quick look into `.gitignore` files, you can find this line `config/e
 - `appLogFolder` is `logFolder` + 'app'. This is used to store application logged messages.
 - `accessLogFolder` is `logFolder` + 'access'. It mimics the Apache http access log.
 - `gulp`: any properties under this is prefixed with `Project.ROOT_FOLDER` if its name ends with 'Folder'
+
+#### Server Port
+This can be set in your `config\env\your_environment.json`
+```json
+{
+	"database": {
+	},
+	"port": 3000
+}
+```
+
+This number can also be changed by using environment variable `PORT`. For example, you can run `PORT=12345 gulp run` to start your server with port number `12345`.
 
 ## SYSTEM ARCHITECTURE
 
