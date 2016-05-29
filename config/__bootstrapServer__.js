@@ -6,7 +6,8 @@ var fs 				= require('fs'),
 	winston			= require('winston'),
 	favicon 		= require('serve-favicon'),
 	cookieParser 	= require('cookie-parser'),
-	bodyParser 		= require('body-parser');
+	bodyParser 		= require('body-parser'),
+	debug			= require('debug')('ProjectJS');
 
 /**
  * This sets up settings for server
@@ -20,7 +21,14 @@ module.exports = function (project, serverSettings){
 
 	var logger = project.logger;
 
-
+	debug('Setting up Cross Origin Resource Sharing');
+	serverSettings.use(function(req, res, next) {
+		debug('Adding header for CORS');
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+		next();
+	});
 
 	/* Setting up access logging */
 	
