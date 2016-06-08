@@ -1,6 +1,7 @@
 var path 				= require('path'),
 	fs 					= require('fs'),
-	_					= require('underscore');
+	_					= require('underscore'),
+	debug				= require('debug')('ProjectJS');
 
 /* setting custom logger */
 var customLogLevels = {
@@ -17,6 +18,7 @@ var customLogLevels = {
  * @param env the current running environment
  */
  module.exports = function(env){
+ 	debug('Setting up Project object with env=' + env);
  	var project = {};
 
 	/* Defining extra utilities*/
@@ -48,6 +50,7 @@ var customLogLevels = {
  * @param project the project setting object
  */
 function __loadHelpers__(project){
+	debug('Loading Helpers');
 	var helpers = project.Helpers = {};
 	var wrench = require('wrench');
 	var helperFolder = path.join(project.ROOT_FOLDER, 
@@ -55,11 +58,13 @@ function __loadHelpers__(project){
 	var helperFiles = wrench.readdirSyncRecursive(helperFolder);
 
 	_.each(helperFiles, function(file){
+		debug('Processing Helper File:' + file);
 		var components = file.split(path.sep); // ['path1', 'path2', 'file.js']
 		var folders	= components.slice(0, components.length -1); // ['path1', 'path2']
 		var fileName = components[components.length - 1];
 		var ext = path.extname(fileName).substring(1);
 		if(ext === 'js'){
+			debug('Loading Helper File:' + file);
 			var currModule = helpers;
 			_.each(folders, function(folder){
 				if (! currModule[folder]) {
@@ -67,8 +72,10 @@ function __loadHelpers__(project){
 				}
 				currModule= currModule[folder];
 			});
-			var customMethods = require(path.join(helperFolder, file))(project);
+			var customMethods = __require__(path.join(helperFolder, file), project);
 			_.extend(currModule, customMethods);
+		} else {
+			debug('Helper File: \'' + file + '\' is not a .js file');
 		}
 	});
 }
@@ -78,7 +85,7 @@ function __loadHelpers__(project){
  * @param project the project setting object
  */
 function __loadLogger__(project){
-
+	debug('Loading logger');
 	/* create log directory if not exist */
 	fs.existsSync(project.rootLogFolder) || fs.mkdirSync(project.rootLogFolder);
 	fs.existsSync(project.logFolder) || fs.mkdirSync(project.logFolder);
@@ -117,6 +124,7 @@ function __loadLogger__(project){
  * @param project the project setting object
  */
 function __loadServices__(project){
+	debug('Loading Services');
 	project.Services = {};
 
 	var serviceFolder = path.join(project.ROOT_FOLDER, 'server', 'services');
@@ -132,7 +140,7 @@ function __loadServices__(project){
 
 	_.each(serviceFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Services[name] = require(file)(project);
+		project.Services[name] = __require__(file, project);
 	});
 }
 
@@ -140,6 +148,7 @@ function __loadServices__(project){
  *	This loads all the models
  */
 function __loadModels__(project){
+	debug('Loading models');
 	project.Models 	= {};
 	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
 		config 		= require(knexfile)()[project.env];
@@ -163,7 +172,7 @@ function __loadModels__(project){
 
 	_.each(modelFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Models[name] = require(file)(project, bookshelf);
+		project.Models[name] = __require__(file, [project, bookshelf]);
 	});
 }
 
@@ -227,4 +236,30 @@ function __addRootFolder__(project, gulpDef){
 					gulpDef[key]);
 		}
 	});
+}
+
+/**
+ * This function helps loading a javascript file with arguments
+ * If the javascript file doesn't follow the standard
+ * module.exports = function() {}
+ * It will throw an error to stop the configuration process
+ */
+function __require__(file, args) {
+	try {
+		if (args.constructor.name === 'Array') {
+			if (args.length > 3) {
+				throw new Error('__require__(file, args) only supports' +
+					' maximum args of 3 values');
+			}
+			return require(file)(args[0], args[1], args[2]);
+		} else {
+			return require(file)(args);
+		}
+	} catch (e) {
+		if (e.constructor.name === 'TypeError' &&
+			e.message === 'require(...) is not a function') {
+				throw new Error(file + ' must use the syntax' +
+					' module.exports = function(){}');
+		}
+	}
 }

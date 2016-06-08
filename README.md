@@ -20,6 +20,8 @@
 		- [1. Don't use your Model directly in the controller](#)
 		- [2. Don't litter the routes](#)
 	- [Helpers](#)
+	- [Error Handling](#)
+	- [Logging](#)
 - [CUSTOMISATION](#)
 	- [Behind The Scene](#)
 	- [Gulp](#)
@@ -273,7 +275,22 @@ module.exports = function(Project){
 ```
 
 Notice the way we call our `homepage` method which is `Project.Helpers.controllers.homepage` not ~~`Project.Helpers.controllers.index.homepage`~~. Hence, the filename doesn't matter here. It will only copy all the methods from all the files under _server/helpers/controllers_ folder to the object `Project.Helpers.controllers`. Since you got a hold of the route function, you can do unit testing for the method.
-
+### Error Handling
+You can utilise the concept of Helpers to write your custom code for error handling. An example has been given under `helpers/errors/index.js`
+```javascript
+module.exports = function(Project) {
+	return {
+		handle: function(res, error) {
+			if (error.constructor.name === 'TypeError') {
+				console.log(error);
+			}
+			
+			res.send('error:' + error);
+		}
+	};
+}
+```
+Then you can access the function in your controllers by calling `Project.Helpers.errors.handle(response, errors)`
 ### Logging
 There are 2 types of logging. One is [NPM Debug] and the other is [NPM Winston]. The differences are only when they are used in. In this project, [NPM Debug] is used for logging all the setup including server ports, entering/exiting a function because of its simplicity whereas [NPM Winston] is used after the project settings have been loaded such as controllers' logging, services' logging. Also [NPM Winston] has been used for file logging.
 
