@@ -1,6 +1,7 @@
 var path 				= require('path'),
 	fs 					= require('fs'),
 	_					= require('underscore'),
+	common				= require('./__common__.js')(),
 	debug				= require('debug')('ProjectJS');
 
 /* setting custom logger */
@@ -72,7 +73,7 @@ function __loadHelpers__(project){
 				}
 				currModule= currModule[folder];
 			});
-			var customMethods = __require__(path.join(helperFolder, file), project);
+			var customMethods = common.require(path.join(helperFolder, file), project);
 			_.extend(currModule, customMethods);
 		} else {
 			debug('Helper File: \'' + file + '\' is not a .js file');
@@ -140,7 +141,7 @@ function __loadServices__(project){
 
 	_.each(serviceFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Services[name] = __require__(file, project);
+		project.Services[name] = common.require(file, project);
 	});
 }
 
@@ -172,7 +173,7 @@ function __loadModels__(project){
 
 	_.each(modelFiles, function(file){
 		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Models[name] = __require__(file, [project, bookshelf]);
+		project.Models[name] = common.require(file, [project, bookshelf]);
 	});
 }
 
@@ -236,30 +237,4 @@ function __addRootFolder__(project, gulpDef){
 					gulpDef[key]);
 		}
 	});
-}
-
-/**
- * This function helps loading a javascript file with arguments
- * If the javascript file doesn't follow the standard
- * module.exports = function() {}
- * It will throw an error to stop the configuration process
- */
-function __require__(file, args) {
-	try {
-		if (args.constructor.name === 'Array') {
-			if (args.length > 3) {
-				throw new Error('__require__(file, args) only supports' +
-					' maximum args of 3 values');
-			}
-			return require(file)(args[0], args[1], args[2]);
-		} else {
-			return require(file)(args);
-		}
-	} catch (e) {
-		if (e.constructor.name === 'TypeError' &&
-			e.message === 'require(...) is not a function') {
-				throw new Error(file + ' must use the syntax' +
-					' module.exports = function(){}');
-		}
-	}
 }

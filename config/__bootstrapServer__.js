@@ -7,6 +7,7 @@ var fs 				= require('fs'),
 	favicon 		= require('serve-favicon'),
 	cookieParser 	= require('cookie-parser'),
 	bodyParser 		= require('body-parser'),
+	common			= require('./__common__.js')(),
 	debug			= require('debug')('ProjectJS');
 
 /**
@@ -42,6 +43,7 @@ module.exports = function (project, serverSettings){
 	/* Defining static routes */
 	__loadStaticRoutes__(project, serverSettings);
 	
+	debug('Setting up view engine for express');
 	// view engine setup
 	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
 	serverSettings.set('view engine', 'html');
@@ -49,10 +51,12 @@ module.exports = function (project, serverSettings){
 
 	// uncomment after placing your favicon in /public
 	//serverSettings.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+	debug('Setting up bodyParser and cookieParser');
 	serverSettings.use(bodyParser.json());
 	serverSettings.use(bodyParser.urlencoded({ extended: false }));
 	serverSettings.use(cookieParser());
 
+	debug('Setting up error handling for page not found');
 	// catch 404 and forward to error handler
 	serverSettings.use(function(req, res, next) {
 		var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -66,14 +70,16 @@ module.exports = function (project, serverSettings){
 	// development error handler
 	// will print stacktrace
 	if (serverSettings.get('env') === 'development') {
-	  serverSettings.use(function(err, req, res, next) {
-	    res.status(err.status || 500);
-	    res.render('error', {
-	      message: err.message,
-	      error: err
-	    });
-	    logger.debug(err);
-	  });
+		debug('Since this is for development. Enabling setup ' + 
+			'for display error message to user');
+		serverSettings.use(function(err, req, res, next) {
+			res.status(err.status || 500);
+			res.render('error', {
+			  message: err.message,
+			  error: err
+			});
+			logger.debug(err);
+		});
 	}
 
 	// production error handler
@@ -95,6 +101,7 @@ module.exports = function (project, serverSettings){
  * @param serverSettings the server running this project
  */
 function __loadStaticRoutes__(project, serverSettings){
+	debug('Loading static routes');
 	serverSettings.use('/static/js', 
 			express.static(project.gulp.tmpJavascriptFolder));
 	
@@ -112,12 +119,19 @@ function __loadStaticRoutes__(project, serverSettings){
  * @param serverSettings the server running this project
  */
 function __loadRoutes__(project, serverSettings) {
+	debug('Loading Routes');
 	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
 	var routeFiles = fs.readdirSync(routesFolder);
 	_.each(routeFiles, function(file){
-		var routeDefinition = require(path.join(routesFolder, file))(project);
-		serverSettings.use(routeDefinition.base, routeDefinition.router);
-		project.routes[routeDefinition.base] = routeDefinition.router;
+		debug('Loading route using file = ' + file);
+		var ext = path.extname(file).substring(1);
+		if (ext === 'js') {
+			var routeDefinition = common.require(path.join(routesFolder, file), project);
+			serverSettings.use(routeDefinition.base, routeDefinition.router);
+			project.routes[routeDefinition.base] = routeDefinition.router;
+		} else {
+			debug(file + ' is not a .js file');
+		}
 	});
 }
 
