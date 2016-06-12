@@ -43,7 +43,7 @@ This NodeJS project uses MVC architecture with Express underspinning. This can b
 - PostgreSQL: This can be changed in the config/env/{{name}}.json. **NOTE**: Please change the database name and user account before running the application.
 
 ### Commands
-Depending on which OS your computer is running on, you might set NODE_ENV differently. For example, it would be `NODE_ENV=development gulp run` on MacOS or Linux. On Windows machines, it would be `set NODE_ENV=development && gulp run`.
+Depending on which OS your computer is running on, you might set NODE_ENV differently. For example, it would be `NODE_ENV=development gulp run` on MacOS or Linux. On Windows machines, it would be `set NODE_ENV=development && gulp run`. Also this project is set up to use [NPM Debug]. If you want to have more logging messages, you can run `DEBUG=express,ProjectJS gulp run` on Linux or `set DEBUG=express,ProjectJS && gulp run` on Windows.
 
 
 - `npm install`: This installs all the node dependencies. This should be run before the other commands.

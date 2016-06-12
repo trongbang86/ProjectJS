@@ -1,3 +1,5 @@
+var debug = require('debug')('ProjectJS');
+
 /**
  * This is to share common functions
  */
@@ -15,6 +17,9 @@ module.exports = function() {
  * It will throw an error to stop the configuration process
  */
 function __require__(file, args) {
+	debug('Using common.require() method with file=' + file +
+		'; args type = ' + args.constructor.name);
+
 	try {
 		if (args.constructor.name === 'Array') {
 			if (args.length > 3) {
@@ -30,6 +35,11 @@ function __require__(file, args) {
 			e.message === 'require(...) is not a function') {
 				throw new Error(file + ' must use the syntax' +
 					' module.exports = function(){}');
+		} else {
+			debug('Caught an exception when require file['+ 
+				file + ']. Rethrowing!!!');
+			
+			throw e;
 		}
 	}
 }

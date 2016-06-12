@@ -8,6 +8,7 @@ var fs 				= require('fs'),
 	cookieParser 	= require('cookie-parser'),
 	bodyParser 		= require('body-parser'),
 	common			= require('./__common__.js')(),
+	wrench			= require('wrench'),
 	debug			= require('debug')('ProjectJS');
 
 /**
@@ -121,9 +122,9 @@ function __loadStaticRoutes__(project, serverSettings){
 function __loadRoutes__(project, serverSettings) {
 	debug('Loading Routes');
 	var routesFolder = path.join(project.ROOT_FOLDER, 'server', 'routes');
-	var routeFiles = fs.readdirSync(routesFolder);
+	var routeFiles = wrench.readdirSyncRecursive(routesFolder);
 	_.each(routeFiles, function(file){
-		debug('Loading route using file = ' + file);
+		debug('Loading route using file = ' + path.join(routesFolder, file));
 		var ext = path.extname(file).substring(1);
 		if (ext === 'js') {
 			var routeDefinition = common.require(path.join(routesFolder, file), project);
