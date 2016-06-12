@@ -56,6 +56,7 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 	- `gulp db --migrate`
 	- `gulp db --rollback`
 	- `gulp db --version`
+	- `gulp db --seed <name_of_the_seed_file>`
 
 - `node bin/www`: This starts up the server like `gulp run` but doesn't prepare css, javascript and layout files.
 - `npm run test-server`: Just another way of running test.
