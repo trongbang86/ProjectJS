@@ -8,15 +8,13 @@ before(function(){
 	process.env.NODE_ENV= 'test';
 	var app = require('../../app.js');
 	global.TestProject = app.Project;
+
+	function runSeed(file) {
+		console.log(file);
+	}
 });
 
-/* Defining hooks when server is shutdown */
-// listen for TERM signal .e.g. kill 
-process.on ('SIGTERM', function(){
-  ProjectJS.Projects.shutdown(process.exit);
+after(function(){
+	global.TestProject.shutdown();
+	delete global['TestProject'];
 });
-
-// listen for INT signal e.g. Ctrl-C
-process.on ('SIGINT', function(){
-  ProjectJS.Projects.shutdown(process.exit);
-}); 

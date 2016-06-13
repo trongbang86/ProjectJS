@@ -28,7 +28,14 @@
 		],
 		"testServerFolder": "test/test-server",
 		"testOthersFolder": "test/test-others",
-		"testE2eFolder": "test/test-e2e"
+		"testE2eFolder": "test/test-e2e",
+		"watchTestServerFiles": [
+			"servers/**/*.js", "test/test-server/**/*.js"
+		],
+		"watchTestOthersFiles": [
+			"config/**/*.js", 
+			"test/test-others/**/*.js"
+		]
 	},
 	"port": 3000
 }

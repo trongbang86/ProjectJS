@@ -50,6 +50,12 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 - `bower install`: This installs bower components.
 - `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000.
 - `gulp test`: This is supposed to run all the test cases.
+
+	- `gulp testServer`: continuous testing for server 
+	- `gulp testServerOnce`
+	- `gulp testOthers`: continuous testing for configuration
+	- `gulp testOthersOnce`
+
 - `gulp db`: This does all the database migration jobs. All available options are below:
 
 	- `gulp db --make <name_of_the_migration>`

@@ -30,22 +30,61 @@ __tasks__.test = function(done){
 };
 
 /* @Inherit */
-__tasks__.testServer = function(){
+__tasks__.testServerOnce = function(){
 
 	return gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
-						Project.gulp.testServerFolder + '/**/*.js']).
-				pipe(mocha({
+						Project.gulp.testServerFolder + '/**/*.js'])
+				.pipe(mocha({
 					reporter: 'spec'
-				}));
+				}))
+				.once('error', function() {
+		            Project.shutdown();
+		        })
+		        .once('end', function() {
+		            Project.shutdown();
+		        });
 };
 
 /* @Inherit */
-__tasks__.testOthers = function(){
-	return gulp.src(Project.gulp.testOthersFolder + '/**/*.js').
-				pipe(mocha({
+__tasks__.testServer = function() {
+	gulp.watch(Project.gulp.watchTestServerFiles, function(){
+		gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
+						Project.gulp.testServerFolder + '/**/*.js'])
+			.pipe(mocha({
+				reporter: 'spec'
+			}));
+	});
+}
+
+/* @Inherit */
+__tasks__.testOthersOnce = function(){
+	return gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
+				.pipe(mocha({
 					reporter: 'spec'
-				}));
+				}))
+				.once('error', function() {
+		            Project.shutdown();
+		        })
+		        .once('end', function() {
+		            Project.shutdown();
+		        });
 };
+
+/* @Inherit */
+__tasks__.testOthers = function(done) {
+	gulp.watch(Project.gulp.watchTestOthersFiles, function(){
+		gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
+			.pipe(mocha({
+				reporter: 'spec'
+			}))
+			.once('error', function(error) {
+	            console.log('Finished test suits with errors');
+	        })
+	        .once('end', function() {
+	        	console.log('Finished running tests');
+	        });
+	})
+}
 
 /*
  * This gets the path to protractor folder under node_modules

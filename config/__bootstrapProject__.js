@@ -186,14 +186,20 @@ function __loadModels__(project){
 function __shutdown__(project){
 	return function(){
 		return new Promise(function(resolve, reject){
-			console.log('Destroying connection pools used by knex for the environment ' 
-				+ project.env);
+			if (! project.alreadyShutdown){
+				project.alreadyShutdown = true;
+				console.log('Destroying connection pools used by knex for the environment ' 
+					+ project.env);
 
-			project.Models.__knex__.destroy(function(){
-				console.log('Finished destroying connection pools used by knex' + 
-								' for the environment ' + project.env);
+				project.Models.__knex__.destroy(function(){
+					console.log('Finished destroying connection pools used by knex' + 
+									' for the environment ' + project.env);
+					resolve();
+				})
+			} else {
+				console.log('Already shutdown this project');
 				resolve();
-			})
+			}
 		});
 	};
 	
