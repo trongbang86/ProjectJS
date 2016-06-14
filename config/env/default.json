@@ -30,7 +30,7 @@
 		"testOthersFolder": "test/test-others",
 		"testE2eFolder": "test/test-e2e",
 		"watchTestServerFiles": [
-			"servers/**/*.js", "test/test-server/**/*.js"
+			"server/**/*.js", "test/test-server/**/*.js"
 		],
 		"watchTestOthersFiles": [
 			"config/**/*.js", 
