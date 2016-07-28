@@ -7,5 +7,6 @@
 		"password"	: "123456"
 
 	},
+	"noDatabase": true,
 	"port": 3000
 }

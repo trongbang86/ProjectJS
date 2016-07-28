@@ -31,8 +31,13 @@ var customLogLevels = {
 	__cloneProperties__(nconfInstance, project);
 
 	/* Loading models */
-	__loadModels__(project);
-
+	if (!project.noDatabase) {
+		__loadModels__(project);	
+	} else {
+		debug("noDatabase flag is turned on. Project.Models will be empty.");
+		project.Models = {};
+	}
+	
 	/* Loading logger */
 	__loadLogger__(project);
 
@@ -188,16 +193,22 @@ function __shutdown__(project){
 		return new Promise(function(resolve, reject){
 			if (! project.alreadyShutdown){
 				project.alreadyShutdown = true;
-				console.log('Destroying connection pools used by knex for the environment ' 
-					+ project.env);
+				debug('Destroying connection pools used by knex for the environment ' 
+					+ project.env + '\n');
 
-				project.Models.__knex__.destroy(function(){
-					console.log('Finished destroying connection pools used by knex' + 
-									' for the environment ' + project.env);
+				if(project.Models.__knex__) {
+					project.Models.__knex__.destroy(function(){
+						debug('Finished destroying connection pools used by knex' + 
+										' for the environment ' + project.env + '\n');
+						resolve();
+					})
+				} else {
+					debug('There seems to be no database connection has been set up.' +
+						'No need to close __knex__. \n');
 					resolve();
-				})
+				}
 			} else {
-				console.log('Already shutdown this project');
+				debug('Already shutdown this project.\n');
 				resolve();
 			}
 		});
@@ -221,6 +232,7 @@ function __cloneProperties__(nconf, project) {
 	project.appLogFolder 	= path.join(project.logFolder, 'app');
 	project.accessLogFolder	= path.join(project.logFolder, 'access');
 	project.port 			= nconf.get('port');
+	project.noDatabase		= nconf.get('noDatabase') || false;
 
 	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);

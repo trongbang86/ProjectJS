@@ -136,6 +136,12 @@ After getting an instance of Project setting object, you can access your model b
 	}
 ```
 
+However, if you choose to develop an app without database access, you can use noDatabase flag to switch off this feature. As a result of the flag, `Project.Models` will be an empty map object.
+
+```json
+	"noDatabase": true
+```
+
 You can have access to the underlying knex instance by `Project.Models.__knex__`. To create a new model, simply create a file with the model name and place it under _server/models_ folder. An example of the initial file content is as follows:
 
 ```javascript
