@@ -42,9 +42,9 @@ This NodeJS project uses MVC architecture with Express underspinning. This can b
 - NPM
 - Bower
 - Gulp
-- PostgreSQL: This can be changed in the config/env/{{name}}.json. **NOTE**: Please change the database name and user account before running the application.
+- PostgreSQL: This can be changed in the config/env/{{name}}.json. **NOTE**: Please change the database name and user account before running the application. Alternatively you can disable database acces entirely by using the flag `noDatabase` to be true.
 
-The reason we have Ruby and SASS in the list is that this project uses [gulp-ruby-sass](https://github.com/sindresorhus/gulp-ruby-sass) to compile sass files. Hence, `ruby` and `sass` should be available on the command line.
+The reason we have Ruby and SASS in the list is that this project uses [gulp-ruby-sass](https://github.com/sindresorhus/gulp-ruby-sass) to compile sass files. Hence, `ruby` and `sass` should be available on the command line. You can switch off this option to use plain CSS files by using the flag `noSass` to be true.
 
 ### How To Fire Up
 If you haven't got ruby and sass availble in your console, please follow the steps to install them [SASS Installation](http://sass-lang.com/install).

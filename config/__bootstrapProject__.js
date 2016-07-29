@@ -233,6 +233,7 @@ function __cloneProperties__(nconf, project) {
 	project.accessLogFolder	= path.join(project.logFolder, 'access');
 	project.port 			= nconf.get('port');
 	project.noDatabase		= nconf.get('noDatabase') || false;
+	project.noSass			= nconf.get('noSass') || false;
 
 	project.shutdown 		= __shutdown__(project);
 	__addRootFolder__(project, project.gulp);

@@ -7,6 +7,7 @@ var del 					= require('del'),
 	mainBowerFiles			= require('main-bower-files'),
 	runSequence				= require('run-sequence'),
 	livereload				= require('gulp-livereload'),
+	debug					= require('debug')('ProjectJS'),
 	__lrServerPort__		= 35729,
 	Project 				= null,
 	__tmpLayoutFiles__		= null,
@@ -109,10 +110,21 @@ __tasks__.run = function(done){
 
 /* @Inherit */
 __tasks__.stylesheet = function() {
-	return sass(Project.gulp.frontEndStyleSheets).
-		pipe(autoprefixer('last 2 versions')).
-		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
-		pipe(livereload({port: __lrServerPort__}));
+	if (Project.noSass) {
+		debug('Preparing stylesheet files without SASS');
+
+		return gulp.src(Project.gulp.frontEndStyleSheets).
+			pipe(autoprefixer('last 2 versions')).
+			pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
+			pipe(livereload({port: __lrServerPort__}));	
+
+	} else {
+		debug('Preparing stylesheet files with SASS');
+		return sass(Project.gulp.frontEndStyleSheets).
+			pipe(autoprefixer('last 2 versions')).
+			pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder)).
+			pipe(livereload({port: __lrServerPort__}));	
+	}
 };
 
 /* @Inherit */

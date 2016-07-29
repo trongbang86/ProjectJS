@@ -10,6 +10,7 @@ var	autoprefixer		= require('gulp-autoprefixer'),
 	path				= require('path'),
 	runSequence 		= require('run-sequence'),
 	rename				= require('gulp-rename'),
+	debug				= require('debug')('ProjectJS'),
 	Project				= null,
 	__tmpLayoutFiles__	= null;
 	__tasks__			= {};
@@ -135,9 +136,22 @@ __tasks__.vendorStyleSheet = function(){
  * It does pre-processing for the project's stylesheet files
  */
 __tasks__.projectStyleSheet = function() {
-	return sass(Project.gulp.frontEndStyleSheets).
-		pipe(autoprefixer('last 2 versions')).
-		pipe(concat('project.css')).
-		pipe(minifycss()).
-		pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
+	
+
+	if (Project.noSass) {
+		debug('Preparing stylesheet files without SASS');
+		return gulp.src(Project.gulp.frontEndStyleSheets).
+			pipe(autoprefixer('last 2 versions')).
+			pipe(concat('project.css')).
+			pipe(minifycss()).
+			pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
+
+	} else {
+		debug('Preparing stylesheet files with SASS');
+		return sass(Project.gulp.frontEndStyleSheets).
+			pipe(autoprefixer('last 2 versions')).
+			pipe(concat('project.css')).
+			pipe(minifycss()).
+			pipe(gulp.dest(Project.gulp.tmpStyleSheetFolder));
+	}
 };
