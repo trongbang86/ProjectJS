@@ -36,11 +36,26 @@ This NodeJS project uses MVC architecture with Express underspinning. This can b
 ## WHERE TO START
 
 ### Prerequisites
+- Ruby
+- SASS
 - Node
 - NPM
 - Bower
 - Gulp
 - PostgreSQL: This can be changed in the config/env/{{name}}.json. **NOTE**: Please change the database name and user account before running the application.
+
+The reason we have Ruby and SASS in the list is that this project uses [gulp-ruby-sass](https://github.com/sindresorhus/gulp-ruby-sass) to compile sass files. Hence, `ruby` and `sass` should be available on the command line.
+
+### How To Fire Up
+If you haven't got ruby and sass availble in your console, please follow the steps to install them [SASS Installation](http://sass-lang.com/install).
+
+I assume you have cloned the code to your local PC. Please run the following commands to get the project up and running.
+1. `npm install`
+2. `npm install bower -g`
+3. `bower install`
+4. `NODE_ENV=development DEBUG=express,ProjectJS gulp run`
+
+Open browser and go to http://localhost:3000.
 
 ### Commands
 Depending on which OS your computer is running on, you might set NODE_ENV differently. For example, it would be `NODE_ENV=development gulp run` on MacOS or Linux. On Windows machines, it would be `set NODE_ENV=development && gulp run`. Also this project is set up to use [NPM Debug]. If you want to have more logging messages, you can run `DEBUG=express,ProjectJS gulp run` on Linux or `set DEBUG=express,ProjectJS && gulp run` on Windows.
