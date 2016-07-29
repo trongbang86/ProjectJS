@@ -50,6 +50,7 @@ The reason we have Ruby and SASS in the list is that this project uses [gulp-rub
 If you haven't got ruby and sass availble in your console, please follow the steps to install them [SASS Installation](http://sass-lang.com/install).
 
 I assume you have cloned the code to your local PC. Please run the following commands to get the project up and running.
+
 1. `npm install`
 2. `npm install bower -g`
 3. `bower install`
