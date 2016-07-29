@@ -36,8 +36,8 @@ This NodeJS project uses MVC architecture with Express underspinning. This can b
 ## WHERE TO START
 
 ### Prerequisites
-- Ruby
-- SASS
+- Ruby (optional. There is a configuration flag to turn on/off)
+- SASS (optional. There is a configuration flag to turn on/off)
 - Node
 - NPM
 - Bower
