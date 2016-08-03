@@ -39,6 +39,13 @@ __tasks__.copyFrontEndViewsFiles = function() {
 			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
 };
 
+
+/* @Inherit */
+__tasks__.copyFrontEndNonLayoutFiles = function() {
+	return gulp.src(Project.gulp.frontEndNonLayoutFiles).
+			pipe(gulp.dest(Project.gulp.tmpFrontEndViewsFolder));
+};
+
 /* @Inherit */
 __tasks__.server = function(){
 	/* If server exists, kill it before spawn a new one */

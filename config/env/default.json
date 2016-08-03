@@ -10,6 +10,10 @@
 			"layout.html"
 		],
 		"frontEndViewsFolder": "frontend/views",
+		"frontEndNonLayoutFiles": [
+			"frontend/views/**/*.*",
+			"!frontend/views/**/layout.html"
+		],
 		"frontEndStyleSheets": "frontend/stylesheets/**/*{.sass,.css}",
 		"frontEndJavascript": ["frontend/js/**/*.js"],
 		"tmpFolder": ".tmp",
