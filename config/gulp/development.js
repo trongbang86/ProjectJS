@@ -133,7 +133,7 @@ __tasks__.watch = function() {
 
 	gulp.watch(Project.gulp.frontEndJavascript, ['injectNewJavascript']);
 	gulp.watch(Project.gulp.frontEndStyleSheets, ['injectNewStyleSheets']);
-	gulp.watch(__frontEndLayoutFiles__, ['copyFrontEndViewsFiles']);
+	gulp.watch(Project.gulp.frontEndNonLayoutFiles, ['copyFrontEndNonLayoutFiles']);
 	gulp.watch(Project.ROOT_FOLDER+'/server/**/*.js', ['server'])
 };
 
