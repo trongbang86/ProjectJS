@@ -39,11 +39,6 @@ module.exports = function (project, serverSettings){
 							stream: accessLogStream
 						}));
 
-	__loadRoutes__(project, serverSettings);
-	
-	/* Defining static routes */
-	__loadStaticRoutes__(project, serverSettings);
-	
 	debug('Setting up view engine for express');
 	// view engine setup
 	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
@@ -54,9 +49,14 @@ module.exports = function (project, serverSettings){
 	//serverSettings.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 	debug('Setting up bodyParser and cookieParser');
 	serverSettings.use(bodyParser.json());
-	serverSettings.use(bodyParser.urlencoded({ extended: false }));
+	serverSettings.use(bodyParser.urlencoded({ extended: true }));
 	serverSettings.use(cookieParser());
 
+	__loadRoutes__(project, serverSettings);
+	
+	/* Defining static routes */
+	__loadStaticRoutes__(project, serverSettings);
+	
 	debug('Setting up error handling for page not found');
 	// catch 404 and forward to error handler
 	serverSettings.use(function(req, res, next) {
