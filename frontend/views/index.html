@@ -1,12 +1,13 @@
+
 <div class='container'>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">Project name</a>
 			</div>
@@ -21,47 +22,183 @@
 	</nav>
 </div>
 <div class="container">
+	<form action='./form.action' method='post' novalidate>
+		<div class="row">
 
-	<div class="row">
-		
-		<form class="form-horizontal">
-		<fieldset>
+			<form class="form-horizontal">
+				<fieldset>
 
-		<!-- Form Name -->
-		<legend>A Complex Form</legend>
+					<!-- Form Name -->
+					<legend>A Complex Form</legend>
 
-		<!-- Text input-->
-		<div class="form-group">
-		  <label class="col-md-4 control-label" for="name">Name</label>  
-		  <div class="col-md-4">
-		  <input id="name" name="name" placeholder="your-name" class="form-control input-md" required="" type="text">
-		  <span class="help-block">please enter your name</span>  
-		  </div>
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="fname">First Name</label>  
+									<div class="col-md-8">
+										<input id="fname" name="fname" placeholder="your first name" class="form-control input-md" required="" type="text">
+										<span class="help-block">please enter your first name</span>  
+									</div>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="lname">Last Name</label>  
+									<div class="col-md-8">
+										<input id="lname" name="lname" placeholder="your last name" class="form-control input-md" required="" type="text">
+										<span class="help-block">please enter your last name</span>  
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="emailAddress">Email Address</label>  
+									<div class="col-md-8">
+										<input id="emailAddress" name="emailAddress" placeholder="email address" class="form-control input-md" type="text">
+										<span class="help-block">please enter your email address</span>  
+									</div>
+								</div>
+							</div>
+							<div class='col-md-6'>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="workPhoneNumber">Work Phone Number</label>  
+									<div class="col-md-8">
+										<input id="workPhoneNumber" name="workPhoneNumber" placeholder="work phone number" class="form-control input-md" type="text">
+										<span class="help-block">please enter your work phone number</span>  
+									</div>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="homePhoneNumber">Home Phone Number</label>  
+									<div class="col-md-8">
+										<input id="homePhoneNumber" name="homePhoneNumber" placeholder="home phone number" class="form-control input-md" type="text">
+										<span class="help-block">please enter your home phone number</span>  
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-12'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-2 control-label" for="address">Address</label>  
+									<div class="col-md-10">
+										<input id="address" name="address" placeholder="address" class="form-control input-md" type="text">
+										<span class="help-block">please enter your address</span>  
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="city">City</label>  
+									<div class="col-md-8">
+										<input id="city" name="city" placeholder="city" class="form-control input-md" type="text">
+										<span class="help-block">please enter your city</span>  
+									</div>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="state">State</label>  
+									<div class="col-md-8">
+										<input id="state" name="state" placeholder="state" class="form-control input-md" type="text">
+										<span class="help-block">please enter your state</span>  
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="country">Country</label>  
+									<div class="col-md-8">
+										<input id="country" name="country" placeholder="country" class="form-control input-md" type="text">
+										<span class="help-block">please enter your country</span>  
+									</div>
+								</div>
+							</div>
+							<div class='col-md-6'>
+								<!-- Text input-->
+								<div class="form-group">
+									<label class="col-md-4 control-label" for="zipcode">Zipcode</label>  
+									<div class="col-md-8">
+										<input id="zipcode" name="zipcode" placeholder="zipcode" class="form-control input-md" type="text">
+										<span class="help-block">please enter your zipcode</span>  
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+					<!-- Text input-->
+					<div class="container">
+						<div class='row'>
+							<div class='col-md-6'>
+								<input type='submit' class='btn btn-info pull-right black-background' value='Cancel'/>
+							</div>
+							<div class='col-md-6'>
+								<input type='submit' class='btn btn-info black-background' value='Submit'/>
+							</div>
+
+						</div>
+
+					</div>
+
+				</fieldset>
+			</form>
+
+
 		</div>
 
-		<!-- Text input-->
-		<div class="form-group">
-		  <label class="col-md-4 control-label" for="emailAddress">Email Address</label>  
-		  <div class="col-md-4">
-		  <input id="emailAddress" name="emailAddress" placeholder="email address" class="form-control input-md" type="text">
-		  <span class="help-block">please enter your email address</span>  
-		  </div>
-		</div>
-
-		<!-- Text input-->
-		<div class="form-group">
-		  <label class="col-md-4 control-label" for="phone">Phone Number</label>  
-		  <div class="col-md-4">
-		  <input id="phone" name="phone" placeholder="phone number" class="form-control input-md" type="text">
-		  <span class="help-block">please enter your phone number</span>  
-		  </div>
-		</div>
-
-		</fieldset>
-		</form>
-
-
-	</div>
-
+	</form>
 </div><!-- /.container -->
-    	
