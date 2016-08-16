@@ -7,8 +7,13 @@ exports.config = {
     multiCapabilities: [{
         browserName: 'chrome'
     }],
+    
+    mochaOpts: {
+    	enableTimeouts: false
+    }, 
 
     onPrepare: function(){
     	global.expect = require('chai').expect;
+    	global.helper = require('./helper.js');
     }
 }
