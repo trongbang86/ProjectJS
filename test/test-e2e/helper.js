@@ -1,4 +1,6 @@
 var self = module.exports;
+var fs = require('fs');
+
 /**
  * this looks for a VISIBLE field using its ng-model
  * @param expression
@@ -289,3 +291,22 @@ self.click = function(buttonText) {
        }
     });
 };
+
+/**
+ * This writes data (image) to a file
+ */
+self.writeScreenshot = function writeScreenshot(data, filename) {
+    var stream = fs.createWriteStream(filename);
+    stream.write(new Buffer(data, 'base64'));
+    stream.end();
+
+}
+
+/**
+ * This takes screenshot of the current page
+ */
+self.takeScreenshot = function (filename) {
+    browser.takeScreenshot().then(function (png) {
+        helper.writeScreenshot(png, filename);
+    });
+}

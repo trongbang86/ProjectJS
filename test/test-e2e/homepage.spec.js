@@ -12,6 +12,8 @@ describe('Homepage', function(){
 		helper.fillValue('#country', 'Australia');
 		helper.fillValue('#zipcode', '2000');
 
+		helper.takeScreenshot('C:/dev/tmp/exception.png');
+
 		browser.pause();
 	});
 });
