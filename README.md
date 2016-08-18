@@ -33,6 +33,8 @@
 ## SUMMARY
 This NodeJS project uses MVC architecture with Express underspinning. This can be used as a boilerplate to start a new NodeJS project.
 
+![alt ProjectJS Architecture](docs/ProjectJS-Architecture.png?raw=true)
+
 ## WHERE TO START
 
 ### Prerequisites
