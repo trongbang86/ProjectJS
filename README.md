@@ -8,4 +8,5 @@ After setting up the environment as outlined in [ProjectJS], you can run `gulp t
 
 ![Alt screenshot](docs/screenshot.PNG?raw=true)
 
-[ProjectJS] https://github.com/trongbang86/ProjectJS
+
+[ProjectJS]: https://github.com/trongbang86/ProjectJS
