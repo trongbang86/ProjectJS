@@ -1,5 +1,5 @@
-describe('Homepage', function(){
-	it('can render the homagepage', function(){
+describe('Form', function(){
+	it('can be submitted', function(){
 		browser.driver.get('http://localhost:3000/');
 		helper.fillValue('#fname', 'Greg');
 		helper.fillValue('#lname', 'Smith');
@@ -12,8 +12,11 @@ describe('Homepage', function(){
 		helper.fillValue('#country', 'Australia');
 		helper.fillValue('#zipcode', '2000');
 
-		helper.takeScreenshot('C:/dev/tmp/exception.png');
+		helper.takeScreenshot('./.tmp/screenshot.png');
 
-		browser.pause();
+		helper.click('Submit');
+
+		helper.expectContainText('h1', 'Form Submitted');
+
 	});
 });

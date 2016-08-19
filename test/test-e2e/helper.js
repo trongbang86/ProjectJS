@@ -1,3 +1,7 @@
+/**
+ *  Source: https://gist.github.com/trongbang86/ecbfe8b4b500435dc2c8
+ */
+
 var self = module.exports;
 var fs = require('fs');
 
@@ -300,7 +304,7 @@ self.writeScreenshot = function writeScreenshot(data, filename) {
     stream.write(new Buffer(data, 'base64'));
     stream.end();
 
-}
+};
 
 /**
  * This takes screenshot of the current page
@@ -309,4 +313,17 @@ self.takeScreenshot = function (filename) {
     browser.takeScreenshot().then(function (png) {
         helper.writeScreenshot(png, filename);
     });
-}
+};
+
+/**
+ * This checks if the elements contain the text expected
+ * @param elemExpression the expression to filter elements
+ * @param expectedText the text expected
+ */
+self.expectContainText = function (elemExpression, expectedText) {
+
+    self.visibleArrayElements(elemExpression).getText().then(function(text) {
+        expect(text).to.contain(expectedText);
+    });
+};
+
