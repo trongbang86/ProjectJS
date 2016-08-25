@@ -217,6 +217,8 @@ Please be advised the order of javascript for both vendor and project can be def
 }
 ```
 
+All layout.html files which are under _frontend/views_ folder and its sub folders are watched and when changes take place against those files, the whole compilation process for front end will take place.
+
 ### The Controller in MVC
 Controllers can be found under _server/routes_ folder. A controller file is a node module with Project setting object passed in as a parameter and is supposed to return a dictionary with 2 keys `router` and `base`. It is easier to look into examples.
 
