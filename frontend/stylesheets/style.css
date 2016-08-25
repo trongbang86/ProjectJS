@@ -10,3 +10,8 @@ a {
 .black-background {
 	background-color: #222;
 }
+
+.required:after {
+	content: ' *';
+	color: red;
+}
