@@ -174,6 +174,8 @@ module.exports = function(Project, bookshelf){
 [BookShelf] gives plenty of examples on how to extend model definition such as one-to-one, one-to-many relationships.
 
 ### The View in MVC
+There is a known [delimiter conflict](http://stackoverflow.com/questions/25366412/using-express-handlebars-and-angular-js) between [Handlebars] and [AngularJS]. Please change [your Angular app's delimiter symbols](https://docs.angularjs.org/api/ng/provider/$interpolateProvider) accordingly. An example has been done in _frontend/js/main.js_ file.
+
 Views files can be found under _frontend/views_ folder. [Handlebars] is the template engine employed for this project. You can change this by changing the code in `config/__bootstrapServer__.js`. Look for the line `serverSettings.engine('html', require('hbs').__express)`.
 
 When you start the server, the express server is configured to look for the views and templates from _.tmp/frontend/views_ instead of the _frontend/views_ folder. The reason is that some pre-processing is required for javascript and css files to be injected before hand. Hence, if you only run `node bin/www`, this pre-processing should have taken place earlier. In order to do that, you can run `gulp` with a proper task to get this done. More on this will be explained later all.
@@ -428,3 +430,4 @@ You can bring up the server by running `NODE_ENV=production node bin/www` from t
 [MochaJS]: https://mochajs.org
 [NPM Debug]: https://www.npmjs.com/package/debug
 [NPM Winston]: https://www.npmjs.com/package/winston
+[AngularJS]: https://angularjs.org/
