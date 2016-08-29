@@ -11,6 +11,11 @@ a {
 	background-color: #222;
 }
 
+.error {
+	color: red;
+	font-size: smaller;
+}
+
 .required:after {
 	content: ' *';
 	color: red;
