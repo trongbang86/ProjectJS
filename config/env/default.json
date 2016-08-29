@@ -18,6 +18,7 @@
 		"frontEndJavascript": ["frontend/js/**/*.js"],
 		"tmpFolder": ".tmp",
 		"tmpFrontEndViewsFolder": ".tmp/frontend/views",
+		"tmpFrontEndViewsPartialsFolder": ".tmp/frontend/views/partials",
 		"tmpVendorFolder": ".tmp/frontend/vendor",
 		"tmpStyleSheetFolder": ".tmp/frontend/stylesheets",
 		"tmpJavascriptFolder": ".tmp/frontend/js",

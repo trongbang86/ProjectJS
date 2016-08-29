@@ -9,7 +9,8 @@ var fs 				= require('fs'),
 	bodyParser 		= require('body-parser'),
 	common			= require('./__common__.js')(),
 	wrench			= require('wrench'),
-	debug			= require('debug')('ProjectJS');
+	debug			= require('debug')('ProjectJS'),
+	handlebars		= require('hbs');
 
 /**
  * This sets up settings for server
@@ -41,9 +42,7 @@ module.exports = function (project, serverSettings){
 
 	debug('Setting up view engine for express');
 	// view engine setup
-	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
-	serverSettings.set('view engine', 'html');
-	serverSettings.engine('html', require('hbs').__express);
+	__setView__(project, serverSettings);
 
 	// uncomment after placing your favicon in /public
 	//serverSettings.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -95,6 +94,18 @@ module.exports = function (project, serverSettings){
 	});
 
 };
+
+/**
+ * This sets up the view engine
+ * @param project the project setting object
+ * @param serverSettings the server running this project
+ */
+function __setView__(project, serverSettings) {
+	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
+	serverSettings.set('view engine', 'html');
+	handlebars.registerPartials(project.gulp.tmpFrontEndViewsPartialsFolder);
+	serverSettings.engine('html', handlebars.__express);
+}
 
 /**
  * This sets up the static routes
