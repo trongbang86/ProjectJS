@@ -58,3 +58,4 @@ nbproject
 .tmp
 config/env/__*__.json
 logs
+.vimrc
