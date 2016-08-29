@@ -7,6 +7,3 @@ After setting up the environment as outlined in [ProjectJS], you can run `gulp t
 3. `./node_modules/protractor/bin/protractor  --specs test/test-e2e/**/*.spec.js test/test-e2e/protractor.conf.js`
 
 ![Alt screenshot](docs/screenshot.PNG?raw=true)
-
-
-[ProjectJS]: https://github.com/trongbang86/ProjectJS
