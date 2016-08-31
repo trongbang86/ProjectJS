@@ -12,7 +12,7 @@ After setting up the environment as outlined in [ProjectJS], you can run `gulp t
 They are located under _test/test-e2e_ folder. They will be explained below.
 
 1. _submit_form.spec.js_
-This submits a valid form and checks if the new screen has a header <h1> with the value 'Form Submitted'
+This submits a valid form and checks if the new screen has a header &lt;h1&gt; with the value 'Form Submitted'
 
 2. _invalid_form.spec.js_
 This submits an invalid form with missing First Name.
