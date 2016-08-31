@@ -1,6 +1,6 @@
 var path 				= require('path'),
 	fs 					= require('fs'),
-	_					= require('underscore'),
+	_					= require('lodash'),
 	common				= require('./__common__.js')(),
 	debug				= require('debug')('ProjectJS');
 

@@ -1,7 +1,7 @@
 var debug				= require('debug')('ProjectJS');
 
 var	Promise				= require('bluebird'),
-	_ 					= require('underscore'),
+	_ 					= require('lodash'),
 	__AllProjectsShutdownCalled__ = false,
 	Projects 			= [];
 
