@@ -15,5 +15,6 @@ exports.config = {
     onPrepare: function(){
     	global.expect = require('chai').expect;
     	global.helper = require('./helper.js');
+        global._ = require('lodash');
     }
 }
