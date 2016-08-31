@@ -1,9 +1,8 @@
-describe('Form', function(){
-	it('can be submitted', function(){
+describe('Form', function() {
+	it("can't be submitted with missing First Name", function() {
 		var url = 'http://localhost:3000/';
 		browser.driver.get(url);
 		
-		helper.fillValue('#fname', 'Greg');
 		helper.fillValue('#lname', 'Smith');
 		helper.fillValue('#emailAddress', 'Greg.Smith@rba.gov.au');
 		helper.fillValue('#workPhoneNumber', '95519628');
@@ -14,11 +13,9 @@ describe('Form', function(){
 		helper.fillValue('#country', 'Australia');
 		helper.fillValue('#zipcode', '2000');
 
-		helper.takeScreenshot('./.tmp/screenshot.png');
-
 		helper.click('Submit');
-
-		helper.expectContainText('h1', 'Form Submitted');
-
+		browser.getCurrentUrl().then(function(currentUrl) {
+			expect(currentUrl).to.eq(url);
+		});
 	});
 });
