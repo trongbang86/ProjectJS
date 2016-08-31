@@ -5,7 +5,23 @@ exports.config = {
     baseUrl: 'http://localhost:3000',
 
     multiCapabilities: [{
-        browserName: 'chrome'
+        'browserName': 'firefox'
+    }, , {
+       'browserName': 'chrome',
+       'version': '1',
+       'chromeOptions' : {
+           args: ['--lang=en',
+                  '--window-size=1100,1100']
+       }
+
+    },{
+       'browserName': 'chrome',
+       'version': '2',
+       'chromeOptions' : {
+            args: ['--lang=en',
+                   '--window-size=350,650']
+       }
+
     }],
     
     mochaOpts: {
