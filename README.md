@@ -7,3 +7,15 @@ After setting up the environment as outlined in [ProjectJS], you can run `gulp t
 3. `./node_modules/protractor/bin/protractor  --specs test/test-e2e/**/*.spec.js test/test-e2e/protractor.conf.js`
 
 ![Alt screenshot](docs/screenshot.PNG?raw=true)
+
+## Protractor Test Cases
+They are located under _test/test-e2e_ folder. They will be explained below.
+
+1. _submit_form.spec.js_
+This submits a valid form and checks if the new screen has a header <h1> with the value 'Form Submitted'
+
+2. _invalid_form.spec.js_
+This submits an invalid form with missing First Name.
+
+3. _invalid_form_refactored.spec.js_
+This dynamically adds test cases for missing First Name, Email Address and Work Phone Number.
