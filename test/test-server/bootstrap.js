@@ -1,5 +1,5 @@
 /* registering global variables as testing utilities */
-global._ 		= require('underscore');
+global._ 		= require('lodash');
 global.expect	= require('chai').expect;
 var ProjectJS	= require('../../config/bootstrap.js');
 

@@ -1,6 +1,6 @@
 var gulp 			= require('gulp'),
 	fs				= require('fs');
-global._				= require('underscore');
+global._				= require('lodash');
 
 /**
  * This is to load project settings
