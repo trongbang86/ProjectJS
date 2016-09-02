@@ -4,6 +4,9 @@
 
 var self = module.exports;
 var fs = require('fs');
+var _ = require('lodash');
+var S = require('string');
+var parse = require('csv-parse/lib/sync');
 
 /**
  * this looks for a VISIBLE field using its ng-model
@@ -327,3 +330,24 @@ self.expectContainText = function (elemExpression, expectedText) {
     });
 };
 
+/**
+ * This parses csv files and returns an array of rows each of which
+ * is also an array of values in the corresponding line in the csv file
+ */
+self.readCSV = function (filename) {
+    var data = fs.readFileSync(filename).toString();
+    var res = new Array();
+
+    if (data) {
+        data = data.split('\n');
+        _.each(data, function(line) {
+            if( !S(line).isEmpty(line)) {
+                var record = parse(line);   
+                res.push(record[0]);
+            }
+            
+        });
+    }
+
+    return res;
+}
