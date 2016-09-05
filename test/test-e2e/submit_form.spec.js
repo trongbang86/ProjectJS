@@ -5,6 +5,7 @@ describe('Form', function(){
 		
 		helper.fillValue('#fname', 'Greg');
 		helper.fillValue('#lname', 'Smith');
+		helper.fillValue('#gender', 'male');
 		helper.fillValue('#emailAddress', 'Greg.Smith@rba.gov.au');
 		helper.fillValue('#workPhoneNumber', '95519628');
 		helper.fillValue('#homePhoneNumber', '041234567');
