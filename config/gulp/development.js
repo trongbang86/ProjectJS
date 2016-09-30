@@ -11,7 +11,6 @@ var del 					= require('del'),
 	__lrServerPort__		= 35729,
 	Project 				= null,
 	__tmpLayoutFiles__		= null,
-	__frontEndLayoutFiles__	= null,
 	__tasks__				= {};
 
 module.exports = function(__Project__){
@@ -99,11 +98,17 @@ __tasks__.injectNewStyleSheets = function(done){
 };
 
 /* @Inherit */
-__tasks__.run = function(done){
+__tasks__.compileFrontEnd = function(done) {
 	return runSequence('clean', 
 						['copyBowerFiles', 'copyFrontEndViewsFiles'],
 						['stylesheet', 'javascript'],
 						'wiredep',
+						done);
+}
+
+/* @Inherit */
+__tasks__.run = function(done){
+	return runSequence('compileFrontEnd',
 						['server', 'watch'],
 						done);
 };
@@ -135,6 +140,7 @@ __tasks__.watch = function() {
 	gulp.watch(Project.gulp.frontEndStyleSheets, ['injectNewStyleSheets']);
 	gulp.watch(Project.gulp.frontEndNonLayoutFiles, ['copyFrontEndNonLayoutFiles']);
 	gulp.watch(Project.ROOT_FOLDER+'/server/**/*.js', ['server'])
+	gulp.watch(Project.gulp.frontEndLayoutFiles, ['compileFrontEnd']);
 };
 
 /* @Inherit */

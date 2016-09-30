@@ -33,6 +33,8 @@
 ## SUMMARY
 This NodeJS project uses MVC architecture with Express underspinning. This can be used as a boilerplate to start a new NodeJS project.
 
+![alt ProjectJS Architecture](docs/ProjectJS-Architecture.png?raw=true)
+
 ## WHERE TO START
 
 ### Prerequisites
@@ -71,6 +73,8 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 	- `gulp testServerOnce`
 	- `gulp testOthers`: continuous testing for configuration
 	- `gulp testOthersOnce`
+	- `gulp testProtractor`: runs only the protractor test cases
+	- `gulp testE2e`: boots up the server and then runs protractor test cases
 
 - `gulp db`: This does all the database migration jobs. All available options are below:
 
@@ -170,6 +174,8 @@ module.exports = function(Project, bookshelf){
 [BookShelf] gives plenty of examples on how to extend model definition such as one-to-one, one-to-many relationships.
 
 ### The View in MVC
+There is a known [delimiter conflict](http://stackoverflow.com/questions/25366412/using-express-handlebars-and-angular-js) between [Handlebars] and [AngularJS]. Please change [your Angular app's delimiter symbols](https://docs.angularjs.org/api/ng/provider/$interpolateProvider) accordingly. An example has been done in _frontend/js/main.js_ file.
+
 Views files can be found under _frontend/views_ folder. [Handlebars] is the template engine employed for this project. You can change this by changing the code in `config/__bootstrapServer__.js`. Look for the line `serverSettings.engine('html', require('hbs').__express)`.
 
 When you start the server, the express server is configured to look for the views and templates from _.tmp/frontend/views_ instead of the _frontend/views_ folder. The reason is that some pre-processing is required for javascript and css files to be injected before hand. Hence, if you only run `node bin/www`, this pre-processing should have taken place earlier. In order to do that, you can run `gulp` with a proper task to get this done. More on this will be explained later all.
@@ -212,6 +218,8 @@ Please be advised the order of javascript for both vendor and project can be def
   	]
 }
 ```
+
+All layout.html files which are under _frontend/views_ folder and its sub folders are watched and when changes take place against those files, the whole compilation process for front end will take place.
 
 ### The Controller in MVC
 Controllers can be found under _server/routes_ folder. A controller file is a node module with Project setting object passed in as a parameter and is supposed to return a dictionary with 2 keys `router` and `base`. It is easier to look into examples.
@@ -395,6 +403,13 @@ As you can see, the tasks are grouped to different environments. Their implement
 ## TESTING
 Currently [MochaJS] is being used to do testing. All the server testing can be found under _test/test-sever_ folder. The difference between _test-server_ and _test-other_ is that the Project setting object is created before hand for _test-server_ which can be found in _test/test-server/bootstrap.js_. Doing that helps all the test cases share the same database connection and the NODE_ENV is set to test for them. For _test-other_, you can get the Project setting object at will and shut it down when you're finished. For unit testing such as controllers, if you follow the structure describe in [Helpers](#) section, you can gain access to the controller function such as `homepage` by calling `Project.Helpers.controllers.homepage` which returns a function and you can mock the request and response parameters to pass in.
 
+### Protractor
+Protractor test cases are located under _test/test-e2e_ folder. The naming convention is *.spec.js. The configuration file can be found at _test/test-e2e/protractor.conf.js_ file. You can use the given commands to run the test cases. Alternatively, you can follow [How To Install Protractor](http://www.protractortest.org). After you run `webdriver-manager start`, you can use the command below to run the test cases:
+
+```shell
+./node_modules/protractor/bin/protractor  --specs test/test-e2e/**/*.spec.js test/test-e2e/protractor.conf.js
+```
+
 ## PRODUCTION
 It's desirable to not use gulp to start up the server even though it's possible. If gulp is used, it means there will be 2 processes running at the same time. One is the gulp process and the other is your web application. In order to bring up the server in production, there are 3 steps.
 
@@ -418,3 +433,4 @@ You can bring up the server by running `NODE_ENV=production node bin/www` from t
 [MochaJS]: https://mochajs.org
 [NPM Debug]: https://www.npmjs.com/package/debug
 [NPM Winston]: https://www.npmjs.com/package/winston
+[AngularJS]: https://angularjs.org/

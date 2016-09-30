@@ -2,14 +2,15 @@ var fs 				= require('fs'),
 	path			= require('path'),
 	morgan			= require('morgan'),
 	express			= require('express'),
-	_ 				= require('underscore'),
+	_ 				= require('lodash'),
 	winston			= require('winston'),
 	favicon 		= require('serve-favicon'),
 	cookieParser 	= require('cookie-parser'),
 	bodyParser 		= require('body-parser'),
 	common			= require('./__common__.js')(),
 	wrench			= require('wrench'),
-	debug			= require('debug')('ProjectJS');
+	debug			= require('debug')('ProjectJS'),
+	handlebars		= require('hbs');
 
 /**
  * This sets up settings for server
@@ -39,24 +40,22 @@ module.exports = function (project, serverSettings){
 							stream: accessLogStream
 						}));
 
-	__loadRoutes__(project, serverSettings);
-	
-	/* Defining static routes */
-	__loadStaticRoutes__(project, serverSettings);
-	
 	debug('Setting up view engine for express');
 	// view engine setup
-	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
-	serverSettings.set('view engine', 'html');
-	serverSettings.engine('html', require('hbs').__express);
+	__setView__(project, serverSettings);
 
 	// uncomment after placing your favicon in /public
 	//serverSettings.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 	debug('Setting up bodyParser and cookieParser');
 	serverSettings.use(bodyParser.json());
-	serverSettings.use(bodyParser.urlencoded({ extended: false }));
+	serverSettings.use(bodyParser.urlencoded({ extended: true }));
 	serverSettings.use(cookieParser());
 
+	__loadRoutes__(project, serverSettings);
+	
+	/* Defining static routes */
+	__loadStaticRoutes__(project, serverSettings);
+	
 	debug('Setting up error handling for page not found');
 	// catch 404 and forward to error handler
 	serverSettings.use(function(req, res, next) {
@@ -95,6 +94,18 @@ module.exports = function (project, serverSettings){
 	});
 
 };
+
+/**
+ * This sets up the view engine
+ * @param project the project setting object
+ * @param serverSettings the server running this project
+ */
+function __setView__(project, serverSettings) {
+	serverSettings.set('views', project.gulp.tmpFrontEndViewsFolder);
+	serverSettings.set('view engine', 'html');
+	handlebars.registerPartials(project.gulp.tmpFrontEndViewsPartialsFolder);
+	serverSettings.engine('html', handlebars.__express);
+}
 
 /**
  * This sets up the static routes

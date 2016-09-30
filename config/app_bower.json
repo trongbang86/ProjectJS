@@ -1,7 +1,8 @@
 {
 	"name": "gokien",
   	"main": [
+		".tmp/frontend/js/main.js",
 		".tmp/frontend/js/**/*.js",
-    		".tmp/frontend/stylesheets/**/*.css"
+    	".tmp/frontend/stylesheets/**/*.css"
   	]
 }

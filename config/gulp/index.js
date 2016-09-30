@@ -1,6 +1,6 @@
 var gulp 			= require('gulp'),
 	fs				= require('fs');
-global._				= require('underscore');
+global._				= require('lodash');
 
 /**
  * This is to load project settings
@@ -44,11 +44,15 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  *
  * testOthers: This runs test/test-others
  *
- * testE2e: This runs test/test-e2e using Protractor
+ * testE2e: This boots up the application server and
+ *			runs test/test-e2e using Protractor
  *
  * testServerOnce: one-time off testing for test/test-server
  *
  * testOthersOnce: one-time off testing for test/test-others
+ *
+ * testProtractor: runs only Protractor test 
+ *			cases without booting up the server
  *
  * **********DEVELOPMENT***********
  * bowerWiredep: This injects vendor javascripts and css files into layout(s)
@@ -69,6 +73,12 @@ var tasks = _.extend({}, defaultTasks, envSpecTasks);
  * injectNewStyleSheets: This runs the stylesheet task and then
  * 			wiredep into the layout
  * 
+ * compileFrontEnd: This compiles the whole front end
+ *			it cleans the tmp folder
+ * 			it copies all the stylesheets and javascript files
+ *			processes them and
+ *			wiredep to the layout files
+ *
  * server: This runs/restarts the express server
  *
  *
