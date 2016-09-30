@@ -1,12 +1,12 @@
 **Table of Contents**
 
-- [SUMMARY](#)
-- [WHERE TO START](#)
-	- [Prerequisites](#)
-	- [Commands](#)
-	- [Coding Conventions](#)
-	- [Configurations](#)
-		- [Loading order](#)
+- [SUMMARY](#summary)
+- [WHERE TO START](#where-to-start)
+	- [Prerequisites](#prerequisites)
+	- [Commands](#commands)
+	- [Coding Conventions](#coding-conventions)
+	- [Configurations](#configurations)
+		- [Loading order](#loading-order)
 		- [Special Cases](#)
 		- [Server Port](#)
 - [SYSTEM ARCHITECTURE](#)
@@ -249,6 +249,9 @@ module.exports = function(Project){
 	}
 }
 ```
+
+### Data Access Object (DA0)
+Since the Models are backed by [Knex], they act as DAO objects in this framework. According to [Knex], you can add your own methods to enrich the Models. Therefore, there is no folder so called _dao_ under _server_ folder. If you do have a need to have dedicated DAO objects, what you can do is to add them under _helpers_ folder. However, this is only a suggestion, it's still very much up to your design and you have to make this decision.
 
 ### Best Practices
 Following are only suggestions how we can structure projects to promote reusability and code quality.
