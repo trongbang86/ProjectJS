@@ -10,13 +10,13 @@
 		- [Special Cases](#)
 		- [Server Port](#)
 - [SYSTEM ARCHITECTURE](#)
-	- [Model View Controller](#)
-	- [The Core](#)
-	- [The Model in MVC](#)
-	- [The View in MVC](#)
-	- [The Controller in MVC](#)
-	- [Services](#)
-	- [Best Practices](#)
+	- [Model View Controller](#model-view-controller)
+	- [The Core](#the-core)
+	- [The Model in MVC](#the-model-in-mvc)
+	- [The View in MVC](#the-view-in-mvc)
+	- [The Controller in MVC](#the-controller-in-mvc)
+	- [Services](#services)
+	- [Best Practices](#best-practices)
 		- [1. Don't use your Model directly in the controller](#)
 		- [2. Don't litter the routes](#)
 	- [Helpers](#)
@@ -29,6 +29,7 @@
 		- [How To Find A Task](#)
 - [TESTING](#)
 - [PRODUCTION](#)
+- [DEBUG](#debug)
 
 ## SUMMARY
 This NodeJS project uses MVC architecture with Express underspinning. This can be used as a boilerplate to start a new NodeJS project.
@@ -66,7 +67,7 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 
 - `npm install`: This installs all the node dependencies. This should be run before the other commands.
 - `bower install`: This installs bower components.
-- `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000.
+- `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000. Optionally, you can run with '--debug' argument to turn on debugging.
 - `gulp test`: This is supposed to run all the test cases.
 
 	- `gulp testServer`: continuous testing for server 
@@ -423,6 +424,17 @@ Javascript, stylesheet and view layout files can be processed and placed under _
 4. Run the server
 You can bring up the server by running `NODE_ENV=production node bin/www` from the root of your project's folder.
 
+## DEBUG
+When you turn on debugging, i.e. `gulp run --debug`; the system will be in debug mode. You can find more information on [NodeJS Debug]. Here I'm just listing a few interesting points if you are new to debugging in NodeJS.
+
+1. Default Breakpoint
+Even when you haven't put any `debugger;` statement in your code, NodeJS will enter the debug mode and put it to the very first line in your code base. In this case, it would be the the first line in `www/bin` file.
+2. Debugger statements
+You can put `debugger;` statement in your code to set the breakpoint.
+3. Repl mode
+After it hits the breakpoints, you can type `repl`. After that, you can type variables' name to query information and their values
+
+
 <!---
 	Links used in this README.md
 -->
@@ -434,3 +446,4 @@ You can bring up the server by running `NODE_ENV=production node bin/www` from t
 [NPM Debug]: https://www.npmjs.com/package/debug
 [NPM Winston]: https://www.npmjs.com/package/winston
 [AngularJS]: https://angularjs.org/
+[NodeJS Debug]: https://nodejs.org/api/debugger.html
