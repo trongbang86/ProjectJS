@@ -433,7 +433,10 @@ Even when you haven't put any `debugger;` statement in your code, NodeJS will en
 You can put `debugger;` statement in your code to set the breakpoint.
 3. Repl mode
 After it hits the breakpoints, you can type `repl`. After that, you can type variables' name to query information and their values
-
+4. Reloading
+If you run `gulp run --debug`, every time you change a file which is monitored, gulp reloads the build. Therefore, your code will stop at the Default Breakpoint which is mentioned in #1
+5. Exitting
+When you hit Ctrl-C twice to quit the NodeJS Debugger, you have to press Ctrl-C to send the terminate signal to quit the server too.
 
 <!---
 	Links used in this README.md
