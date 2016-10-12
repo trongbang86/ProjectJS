@@ -19,12 +19,12 @@
 	- [Best Practices](#best-practices)
 		- [1. Don't use your Model directly in the controller](#)
 		- [2. Don't litter the routes](#)
-	- [Helpers](#)
-	- [Error Handling](#)
-	- [Logging](#)
-- [CUSTOMISATION](#)
-	- [Behind The Scene](#)
-	- [Gulp](#)
+	- [Helpers](#helpers)
+	- [Error Handling](#error-handling)
+	- [Logging](#logging)
+- [CUSTOMISATION](#customisation)
+	- [Behind The Scene](#behind-the-scene)
+	- [Gulp](#gulp)
 		- [Structure](#)
 		- [How To Find A Task](#)
 - [TESTING](#)
@@ -67,7 +67,7 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 
 - `npm install`: This installs all the node dependencies. This should be run before the other commands.
 - `bower install`: This installs bower components.
-- `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000. Optionally, you can run with '--debug' argument to turn on debugging.
+- `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000. Optionally, you can run with '--debug' argument to turn on debugging with Node Debugger. Alternatively, you can use '--inspect' to run with [Node Inspector]
 - `gulp test`: This is supposed to run all the test cases.
 
 	- `gulp testServer`: continuous testing for server 
@@ -425,6 +425,8 @@ Javascript, stylesheet and view layout files can be processed and placed under _
 You can bring up the server by running `NODE_ENV=production node bin/www` from the root of your project's folder.
 
 ## DEBUG
+
+### Node Debugger
 When you turn on debugging, i.e. `gulp run --debug`; the system will be in debug mode. You can find more information on [NodeJS Debug]. Here I'm just listing a few interesting points if you are new to debugging in NodeJS.
 
 1. Default Breakpoint
@@ -438,6 +440,9 @@ If you run `gulp run --debug`, every time you change a file which is monitored, 
 5. Exitting
 When you hit Ctrl-C twice to quit the NodeJS Debugger, you have to press Ctrl-C to send the terminate signal to quit the server too.
 
+### Node Inspector
+You can run `gulp run --inspect` to run debugging with [Node Inspector]. [Node Inspector] also puts you at the first default breakpoint as Node Debugger but it launches Chrome Debug Tool which allows you to visually select breakpoints and to inspect variables.
+
 <!---
 	Links used in this README.md
 -->
@@ -450,3 +455,4 @@ When you hit Ctrl-C twice to quit the NodeJS Debugger, you have to press Ctrl-C 
 [NPM Winston]: https://www.npmjs.com/package/winston
 [AngularJS]: https://angularjs.org/
 [NodeJS Debug]: https://nodejs.org/api/debugger.html
+[Node Inspector]: https://github.com/node-inspector/node-inspector
