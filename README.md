@@ -443,6 +443,10 @@ When you hit Ctrl-C twice to quit the NodeJS Debugger, you have to press Ctrl-C 
 ### Node Inspector
 You can run `gulp run --inspect` to run debugging with [Node Inspector]. [Node Inspector] also puts you at the first default breakpoint as Node Debugger but it launches Chrome Debug Tool which allows you to visually select breakpoints and to inspect variables.
 
+### UncaughtException: spawn
+If you happen to encounter this problem when runnin `gulp run --debug` or `gulp run --inspect`, the chances are that you have special settings for .bash_profile or the way $PATH variable gets set up. For example, in my case, it runs perfectly ok on MacOS but when running on Windows with Cygwin, it was giving the error. Particularly, I have *.bat file to set up local environment before running Cygwin and hence `node` and `node-debug` couldn't be found on $PATH.
+
+
 <!---
 	Links used in this README.md
 -->
