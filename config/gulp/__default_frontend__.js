@@ -3,6 +3,7 @@ var del 					= require('del'),
 	path					= require('path'),
 	mainBowerFiles			= require('main-bower-files'),
 	spawn					= require('child_process').spawn,
+    __argv__                = require('yargs').argv,
 	Project 				= null,
 	__tasks__				= {},
 	server 					= null;
@@ -48,9 +49,19 @@ __tasks__.copyFrontEndNonLayoutFiles = function() {
 
 /* @Inherit */
 __tasks__.server = function(){
+    var EXEC_FILE = 'bin/www';
 	/* If server exists, kill it before spawn a new one */
 	!server || server.kill();
+    var args = [];
+    if(__argv__['inspect']) {
+        args.push(EXEC_FILE);
+        server= spawn('node-debug', args, {stdio: 'inherit'});
 
-	server = spawn('node', ['bin/www'], {stdio: 'inherit'});
+    } else {
+        if (__argv__['debug']) args.push('debug');
+        args.push(EXEC_FILE);
+        server = spawn('node', args, {stdio: 'inherit'});
 
+    }
+    
 };
