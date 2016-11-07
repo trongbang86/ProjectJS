@@ -52,38 +52,81 @@ var customLogLevels = {
 };
 
 /**
- * This loads all the helpers
+ * This utility is to load modules
+ * File names will not be used. Ex: project.Helpers.handleErrors()
  * @param project the project setting object
  */
-function __loadHelpers__(project){
-	debug('Loading Helpers');
-	var helpers = project.Helpers = {};
+function __loadWithoutFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
+    debug("__loadWithoutFileName__");
+	var module = project[moduleName] = {};
 	var wrench = require('wrench');
-	var helperFolder = path.join(project.ROOT_FOLDER, 
-								'server', 'helpers');
-	var helperFiles = wrench.readdirSyncRecursive(helperFolder);
+	var moduleFiles = wrench.readdirSyncRecursive(moduleFolder);
 
-	_.each(helperFiles, function(file){
-		debug('Processing Helper File:' + file);
+	_.each(moduleFiles, function(file){
+		debug('Processing File:' + file);
 		var components = file.split(path.sep); // ['path1', 'path2', 'file.js']
 		var folders	= components.slice(0, components.length -1); // ['path1', 'path2']
 		var fileName = components[components.length - 1];
 		var ext = path.extname(fileName).substring(1);
 		if(ext === 'js'){
-			debug('Loading Helper File:' + file);
-			var currModule = helpers;
+			debug('Loading File:' + file);
+			var currModule = module;
 			_.each(folders, function(folder){
 				if (! currModule[folder]) {
 					currModule[folder] = {};
 				}
 				currModule= currModule[folder];
 			});
-			var customMethods = common.require(path.join(helperFolder, file), project);
+            var args = [];
+            args.push(path.join(moduleFolder, file));
+            args.push(project);
+            args = _(args).concat(extraRequiredArgs);
+			var customMethods = common.require.apply(common, args.value());
 			_.extend(currModule, customMethods);
 		} else {
-			debug('Helper File: \'' + file + '\' is not a .js file');
+			debug('File: \'' + file + '\' is not a .js file');
 		}
+
 	});
+}
+
+/**
+ * This utility is used to load modules
+ * The file name is used. Ex: project.Services.AuthenticationService
+ * @param project the project setting object
+ */
+function __loadWithFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
+	project[moduleName] = {};
+
+	var files = _.chain(fs.readdirSync(moduleFolder))
+						.filter(function(file){
+							return fs.lstatSync(path.join(moduleFolder, file)).isFile();
+						})
+						.map(function(file){
+							return path.join(moduleFolder, file);
+						})
+						.value();
+
+	_.each(files, function(file){
+		var name = path.basename(file).replace('.js', ''); //removing the extension too
+        var args = [];
+        args.push(file);
+        args.push(project);
+        args = _(args).concat(extraRequiredArgs);
+		project[moduleName][name] = common.require.apply(common, args.value());
+	});
+}
+
+/**
+ * This loads all the helpers
+ * @param project the project setting object
+ */
+function __loadHelpers__(project){
+
+	debug('Loading Helpers');
+	var helperFolder = path.join(project.ROOT_FOLDER, 
+								'server', 'helpers');
+    __loadWithoutFileName__(project, 'Helpers', helperFolder);
 }
 
 /**
@@ -131,23 +174,8 @@ function __loadLogger__(project){
  */
 function __loadServices__(project){
 	debug('Loading Services');
-	project.Services = {};
-
 	var serviceFolder = path.join(project.ROOT_FOLDER, 'server', 'services');
-
-	var serviceFiles = _.chain(fs.readdirSync(serviceFolder))
-						.filter(function(file){
-							return fs.lstatSync(path.join(serviceFolder, file)).isFile();
-						})
-						.map(function(file){
-							return path.join(serviceFolder, file);
-						})
-						.value();
-
-	_.each(serviceFiles, function(file){
-		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Services[name] = common.require(file, project);
-	});
+    __loadWithFileName__(project, 'Services', serviceFolder);
 }
 
 /**
