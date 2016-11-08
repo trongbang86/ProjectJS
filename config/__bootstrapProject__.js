@@ -77,43 +77,21 @@ function __loadWithoutFileName__(project, moduleName, moduleFolder, extraRequire
 				}
 				currModule= currModule[folder];
 			});
+
             var args = [];
+            var argsSecond = [];
+            argsSecond.push(project);
+            argsSecond = _(argsSecond).concat(extraRequiredArgs);
+
             args.push(path.join(moduleFolder, file));
-            args.push(project);
-            args = _(args).concat(extraRequiredArgs);
-			var customMethods = common.require.apply(common, args.value());
+            args.push(argsSecond.value());
+
+			var customMethods = common.require.apply(common, args);
 			_.extend(currModule, customMethods);
 		} else {
 			debug('File: \'' + file + '\' is not a .js file');
 		}
 
-	});
-}
-
-/**
- * This utility is used to load modules
- * The file name is used. Ex: project.Services.AuthenticationService
- * @param project the project setting object
- */
-function __loadWithFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
-	project[moduleName] = {};
-
-	var files = _.chain(fs.readdirSync(moduleFolder))
-						.filter(function(file){
-							return fs.lstatSync(path.join(moduleFolder, file)).isFile();
-						})
-						.map(function(file){
-							return path.join(moduleFolder, file);
-						})
-						.value();
-
-	_.each(files, function(file){
-		var name = path.basename(file).replace('.js', ''); //removing the extension too
-        var args = [];
-        args.push(file);
-        args.push(project);
-        args = _(args).concat(extraRequiredArgs);
-		project[moduleName][name] = common.require.apply(common, args.value());
 	});
 }
 
@@ -169,6 +147,36 @@ function __loadLogger__(project){
 }
 
 /**
+ * This utility is used to load modules
+ * The file name is used. Ex: project.Services.AuthenticationService
+ * @param project the project setting object
+ */
+function __loadWithFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
+	project[moduleName] = {};
+
+	var files = _.chain(fs.readdirSync(moduleFolder))
+						.filter(function(file){
+							return fs.lstatSync(path.join(moduleFolder, file)).isFile();
+						})
+						.map(function(file){
+							return path.join(moduleFolder, file);
+						})
+						.value();
+
+	_.each(files, function(file){
+		var name = path.basename(file).replace('.js', ''); //removing the extension too
+        var args = [];
+        var argsSecond = [];
+        argsSecond.push(project);
+        argsSecond = _(argsSecond).concat(extraRequiredArgs);
+
+        args.push(file);
+        args.push(argsSecond.value());
+		project[moduleName][name] = common.require.apply(common, args);
+	});
+}
+
+/**
  * This loads all the services
  * @param project the project setting object
  */
@@ -182,32 +190,18 @@ function __loadServices__(project){
  *	This loads all the models
  */
 function __loadModels__(project){
-	debug('Loading models');
-	project.Models 	= {};
+
+    debug('Loading models');
 	var knexfile	= path.join(project.ROOT_FOLDER, 'config', 'knexfile.js'),
 		config 		= require(knexfile)()[project.env];
 	
 	var	knex 		= require('knex')(config);
 
-	project.Models.__knex__ = knex;
-
 	var bookshelf 	= require('bookshelf')(knex);
 	var modelFolder = path.join(project.ROOT_FOLDER, 
 						'server', 'models');		
-
-	var modelFiles 	= _.chain(fs.readdirSync(modelFolder))
-						.filter(function(file){
-							return fs.lstatSync(path.join(modelFolder, file)).isFile();
-						})
-						.map(function(file){
-							return path.join(modelFolder, file);
-						})
-						.value();
-
-	_.each(modelFiles, function(file){
-		var name = path.basename(file).replace('.js', ''); //removing the extension too
-		project.Models[name] = common.require(file, [project, bookshelf]);
-	});
+    __loadWithFileName__(project, 'Models', modelFolder, [bookshelf]);
+    project.Models.__knex__ = knex;
 }
 
 /**
