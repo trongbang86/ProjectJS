@@ -144,7 +144,7 @@ This way is used to get an instance of Project and to apply all the setup for se
 This is used when we don't want to create another Project instance but rather reusing the `AnotherProjectInstance` and to apply server settings to the instance `require('express')()` above.
 
 ### The Model in MVC
-After getting an instance of Project setting object, you can access your model by `Project.Models.YourModelName`. The model name is the name of the corresponding file under _server/models_ folder. [BookShelf] framework is being used for this model layer. In short, BookShelf is a Javascript ORM for Nodejs and is built on top of [Knex] which handles the connnection pools to database. Knex is built for Postgres, MySQL, MariaDB, SQLite3, and Oracle. Hence, you can switch to any of these DBMS as you wish. The following settings need to be changed accordingly.
+After getting an instance of Project setting object, you can access your model by `Project.Models.YourModelName`. The model name is the name of the corresponding file under _server/models_ folder. If you put your models under sub-folders of the _server_ folder, you can access them the same way as `Project.Models.YourModelName`. Hence, duplicate models with the same file names will be overriden. [BookShelf] framework is being used for this model layer. In short, BookShelf is a Javascript ORM for Nodejs and is built on top of [Knex] which handles the connnection pools to database. Knex is built for Postgres, MySQL, MariaDB, SQLite3, and Oracle. Hence, you can switch to any of these DBMS as you wish. The following settings need to be changed accordingly.
 
 ```json
 	"database": {
