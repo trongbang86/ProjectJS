@@ -2,6 +2,7 @@ var path 				= require('path'),
 	fs 					= require('fs'),
 	_					= require('lodash'),
 	common				= require('./__common__.js')(),
+	wrench              = require('wrench'),
 	debug				= require('debug')('ProjectJS');
 
 /* setting custom logger */
@@ -59,7 +60,6 @@ var customLogLevels = {
 function __loadWithoutFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
     debug("__loadWithoutFileName__");
 	var module = project[moduleName] = {};
-	var wrench = require('wrench');
 	var moduleFiles = wrench.readdirSyncRecursive(moduleFolder);
 
 	_.each(moduleFiles, function(file){
@@ -153,8 +153,8 @@ function __loadLogger__(project){
  */
 function __loadWithFileName__(project, moduleName, moduleFolder, extraRequiredArgs){
 	project[moduleName] = {};
-
-	var files = _.chain(fs.readdirSync(moduleFolder))
+    
+	var files = _.chain(wrench.readdirSyncRecursive(moduleFolder))
 						.filter(function(file){
 							return fs.lstatSync(path.join(moduleFolder, file)).isFile();
 						})
