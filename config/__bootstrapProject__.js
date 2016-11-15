@@ -20,13 +20,19 @@ var customLogLevels = {
  * @param env the current running environment
  */
  module.exports = function(env){
- 	debug('Setting up Project object with env=' + env);
  	var project = {};
 
 	/* Defining extra utilities*/
 	project.env = env;
 	project.ROOT_FOLDER = path.join(__dirname, "..");
-	
+    project.name = (new Date()).getMilliseconds();
+    project.toString = function() {
+        return 'Project [Env=' + project.env + 
+            ', Name=' + project.name + ']';
+    };
+
+ 	debug('Setting up ' + project.toString());
+
 	/* Using nconf to get custom settings for different environments */
 	var nconfInstance = require(__dirname + "/env").call(project);
 	__cloneProperties__(nconfInstance, project);
@@ -215,22 +221,22 @@ function __shutdown__(project){
 		return new Promise(function(resolve, reject){
 			if (! project.alreadyShutdown){
 				project.alreadyShutdown = true;
-				debug('Destroying connection pools used by knex for the environment ' 
-					+ project.env + '\n');
+				debug('Destroying connection pools used by knex for ' +
+                        project.toString() + '\n');
 
 				if(project.Models.__knex__) {
 					project.Models.__knex__.destroy(function(){
-						debug('Finished destroying connection pools used by knex' + 
-										' for the environment ' + project.env + '\n');
+						debug('Finished destroying connection pools used by knex for ' + 
+										project.toString() +  '\n');
 						resolve();
 					})
 				} else {
-					debug('There seems to be no database connection has been set up.' +
-						'No need to close __knex__. \n');
+					debug('There seems to be no database connection has been set up for ' +
+                            project.toString() + 'No need to close __knex__. \n');
 					resolve();
 				}
 			} else {
-				debug('Already shutdown this project.\n');
+				debug('Already shutdown ' + project.toString()  + '\n');
 				resolve();
 			}
 		});
