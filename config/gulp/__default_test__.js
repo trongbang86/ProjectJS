@@ -21,6 +21,7 @@ module.exports = function(__Project__){
  * This runs all the mocha tests
  */
 __tasks__.test = function(done){
+    __init__();
 	return runSequence('testServer', 'testOthers', 
 				'testE2e', function(){
 					Projects.shutdown(function(){
@@ -31,6 +32,7 @@ __tasks__.test = function(done){
 
 /* @Inherit */
 __tasks__.testServerOnce = function(){
+    __init__();
 
 	return gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
 						Project.gulp.testServerFolder + '/**/*.js'])
@@ -47,6 +49,7 @@ __tasks__.testServerOnce = function(){
 
 /* @Inherit */
 __tasks__.testServer = function() {
+    __init__();
 	gulp.watch(Project.gulp.watchTestServerFiles, function(){
 		gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
 						Project.gulp.testServerFolder + '/**/*.js'])
@@ -58,6 +61,7 @@ __tasks__.testServer = function() {
 
 /* @Inherit */
 __tasks__.testOthersOnce = function(){
+    __init__();
 	return gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
 				.pipe(mocha({
 					reporter: 'spec'
@@ -72,6 +76,7 @@ __tasks__.testOthersOnce = function(){
 
 /* @Inherit */
 __tasks__.testOthers = function(done) {
+    __init__();
 	gulp.watch(Project.gulp.watchTestOthersFiles, function(){
 		gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
 			.pipe(mocha({
@@ -97,11 +102,13 @@ function getProtractorBinary(binaryName){
 
 /* @Inherit */
 __tasks__.testE2e = function(done){
+    __init__();
 	return runSequence('server', 'testProtractor', done);
 };
 
 /* @Inherit */
 __tasks__.testProtractor = function(done){
+    __init__();
 
 	return new Promise(function(resolve, reject){
 		/**
@@ -144,3 +151,13 @@ __tasks__.testProtractor = function(done){
 	
 
 };
+
+/**
+ * This sets up everything before running tests
+ */
+function __init__() {
+    if (process.env.NODE_ENV === undefined 
+            || process.env.NODE_ENV === '') {
+        process.env.NODE_ENV='test';
+    }
+}
