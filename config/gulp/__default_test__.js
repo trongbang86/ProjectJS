@@ -4,6 +4,7 @@ var gulp 		= require('gulp'),
 	protractor	= require('gulp-protractor').protractor,
 	spawn		= require('child_process').spawn,
 	path 		= require('path'),
+    istanbul    = require('gulp-istanbul'),
 	Promise		= require('bluebird'),
 	Project		= null,
 	__tasks__	= {};
@@ -30,65 +31,95 @@ __tasks__.test = function(done){
 	});
 };
 
+/**
+ * return a common stream for running
+ * test-server with coverage
+ */
+function __testServer__() {
+	return gulp.src(['./server/**/*.js'])
+                .pipe(istanbul({includeUntested: true}))
+                .pipe(istanbul.hookRequire())
+                .on('finish', function() {
+                    gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
+                                Project.gulp.testServerFolder + '/**/*.js'])
+                        .pipe(mocha({
+                            reporter: 'spec'
+                        }))
+                        .pipe(istanbul.writeReports({
+                            dir: './coverage/test-server',
+                            reporters: [ 'html' ],
+                            reportOpts: { dir: './coverage/test-server'}
+                        }))
+                        .once('error', function() {
+                            Project.shutdown();
+                        })
+                        .once('end', function() {
+                            Project.shutdown();
+                        });
+        
+                });
+
+}
+
 /* @Inherit */
 __tasks__.testServerOnce = function(){
     __init__();
-
-	return gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
-						Project.gulp.testServerFolder + '/**/*.js'])
-				.pipe(mocha({
-					reporter: 'spec'
-				}))
-				.once('error', function() {
-		            Project.shutdown();
-		        })
-		        .once('end', function() {
-		            Project.shutdown();
-		        });
+    return __testServer__();
 };
 
 /* @Inherit */
 __tasks__.testServer = function() {
     __init__();
+    __testServer__();
 	gulp.watch(Project.gulp.watchTestServerFiles, function(){
-		gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
-						Project.gulp.testServerFolder + '/**/*.js'])
-			.pipe(mocha({
-				reporter: 'spec'
-			}));
+        __testServer__();
 	});
 }
+
+/**
+ * a common method for testing test-others
+ */
+function __testOthers__() {
+    return gulp.src('./config/**/*.js')
+        .pipe(istanbul({includeUntested: true}))
+        .pipe(istanbul.hookRequire())
+        .on('finish', function() {
+            gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
+                .pipe(mocha({
+                    reporter: 'spec'
+                }))
+                .pipe(istanbul.writeReports({
+                    dir: './coverage/test-others',
+                    reporters: [ 'html' ],
+                    reportOpts: { dir: './coverage/test-others'}
+                }))
+                .once('error', function() {
+                    console.log('Finished test suits with errors');
+                    Project.shutdown();
+                })
+                .once('end', function() {
+                    console.log('Finished running tests');
+                    Project.shutdown();
+                });
+        
+        });
+
+}
+
 
 /* @Inherit */
 __tasks__.testOthersOnce = function(){
     __init__();
-	return gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
-				.pipe(mocha({
-					reporter: 'spec'
-				}))
-				.once('error', function() {
-		            Project.shutdown();
-		        })
-		        .once('end', function() {
-		            Project.shutdown();
-		        });
+	return __testOthers__();
 };
 
 /* @Inherit */
 __tasks__.testOthers = function(done) {
     __init__();
+    __testOthers__();
 	gulp.watch(Project.gulp.watchTestOthersFiles, function(){
-		gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
-			.pipe(mocha({
-				reporter: 'spec'
-			}))
-			.once('error', function(error) {
-	            console.log('Finished test suits with errors');
-	        })
-	        .once('end', function() {
-	        	console.log('Finished running tests');
-	        });
-	})
+        __testOthers__();
+	});
 }
 
 /*
