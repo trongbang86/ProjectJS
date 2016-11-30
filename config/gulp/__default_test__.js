@@ -3,6 +3,8 @@ var gulp 		= require('gulp'),
 	runSequence = require('run-sequence'),
 	protractor	= require('gulp-protractor').protractor,
 	spawn		= require('child_process').spawn,
+	__argv__ 	= require('yargs').argv,
+    gulpif      = require('gulp-if'),
 	path 		= require('path'),
     istanbul    = require('gulp-istanbul'),
 	Promise		= require('bluebird'),
@@ -36,20 +38,27 @@ __tasks__.test = function(done){
  * test-server with coverage
  */
 function __testServer__() {
+    var debugFlag = __argv__['debug'];
+    var timeout = 2000;
+    
+    if(debugFlag){
+        timeout = 999999;
+    }
 	return gulp.src(['./server/**/*.js'])
-                .pipe(istanbul({includeUntested: true}))
-                .pipe(istanbul.hookRequire())
+                .pipe(gulpif(!debugFlag, istanbul({includeUntested: true})))
+                .pipe(gulpif(!debugFlag, istanbul.hookRequire()))
                 .on('finish', function() {
                     gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
                                 Project.gulp.testServerFolder + '/**/*.js'])
                         .pipe(mocha({
-                            reporter: 'spec'
+                            reporter: 'spec',
+                            timeout: timeout
                         }))
-                        .pipe(istanbul.writeReports({
+                        .pipe(gulpif (!debugFlag, istanbul.writeReports({
                             dir: './coverage/test-server',
                             reporters: [ 'html' ],
                             reportOpts: { dir: './coverage/test-server'}
-                        }))
+                        })))
                         .once('error', function() {
                             Project.shutdown();
                         })
@@ -57,6 +66,12 @@ function __testServer__() {
                             Project.shutdown();
                         });
         
+                })
+                .once('error', function() {
+                    Project.shutdown();
+                })
+                .once('end', function() {
+                    Project.shutdown();
                 });
 
 }
@@ -94,14 +109,18 @@ function __testOthers__() {
                     reportOpts: { dir: './coverage/test-others'}
                 }))
                 .once('error', function() {
-                    console.log('Finished test suits with errors');
                     Project.shutdown();
                 })
                 .once('end', function() {
-                    console.log('Finished running tests');
                     Project.shutdown();
                 });
         
+        })
+        .once('error', function() {
+            Project.shutdown();
+        })
+        .once('end', function() {
+            Project.shutdown();
         });
 
 }
