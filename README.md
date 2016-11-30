@@ -404,6 +404,8 @@ As you can see, the tasks are grouped to different environments. Their implement
 ## TESTING
 Currently [MochaJS] is being used to do testing. All the server testing can be found under _test/test-sever_ folder. The difference between _test-server_ and _test-other_ is that the Project setting object is created before hand for _test-server_ which can be found in _test/test-server/bootstrap.js_. Doing that helps all the test cases share the same database connection and the NODE_ENV is set to test for them. For _test-other_, you can get the Project setting object at will and shut it down when you're finished. For unit testing such as controllers, if you follow the structure describe in [Helpers](#) section, you can gain access to the controller function such as `homepage` by calling `Project.Helpers.controllers.homepage` which returns a function and you can mock the request and response parameters to pass in.
 
+After running _test-server_ and _test-other_, coverage reports can be found under _coverage_ folder. If you add --debug at run time, it will not put you into the debug mode. The flag --debug is used to stop istanbul from instrumenting the source code, thereby giving you the real source code and it is used to increase the timeout period of Mocha test.
+
 ### Protractor
 Protractor test cases are located under _test/test-e2e_ folder. The naming convention is *.spec.js. The configuration file can be found at _test/test-e2e/protractor.conf.js_ file. You can use the given commands to run the test cases. Alternatively, you can follow [How To Install Protractor](http://www.protractortest.org). After you run `webdriver-manager start`, you can use the command below to run the test cases:
 
@@ -460,3 +462,4 @@ If you happen to encounter this problem when runnin `gulp run --debug` or `gulp 
 [AngularJS]: https://angularjs.org/
 [NodeJS Debug]: https://nodejs.org/api/debugger.html
 [Node Inspector]: https://github.com/node-inspector/node-inspector
+[Istanbul]: https://github.com/SBoudrias/gulp-istanbul
