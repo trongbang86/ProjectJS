@@ -95,19 +95,25 @@ __tasks__.testServer = function() {
  * a common method for testing test-others
  */
 function __testOthers__() {
+    var debugFlag = __argv__['debug'];
+    var timeout = 2000;
+    
+    if(debugFlag){
+        timeout = 999999;
+    }
     return gulp.src('./config/**/*.js')
-        .pipe(istanbul({includeUntested: true}))
-        .pipe(istanbul.hookRequire())
+        .pipe(gulpif(!debugFlag, istanbul({includeUntested: true})))
+        .pipe(gulpif(!debugFlag, istanbul.hookRequire()))
         .on('finish', function() {
             gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
                 .pipe(mocha({
                     reporter: 'spec'
                 }))
-                .pipe(istanbul.writeReports({
+                .pipe(gulpif(!debugFlag, istanbul.writeReports({
                     dir: './coverage/test-others',
                     reporters: [ 'html' ],
                     reportOpts: { dir: './coverage/test-others'}
-                }))
+                })))
                 .once('error', function() {
                     Project.shutdown();
                 })

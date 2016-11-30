@@ -27,8 +27,8 @@
 	- [Gulp](#gulp)
 		- [Structure](#)
 		- [How To Find A Task](#)
-- [TESTING](#)
-- [PRODUCTION](#)
+- [TESTING](#testing)
+- [PRODUCTION](#production)
 - [DEBUG](#debug)
 
 ## SUMMARY
@@ -70,10 +70,10 @@ Depending on which OS your computer is running on, you might set NODE_ENV differ
 - `gulp run`: This starts up the server for NODE_ENV=development. You can then open http://localhost:3000. Optionally, you can run with '--debug' argument to turn on debugging with Node Debugger. Alternatively, you can use '--inspect' to run with [Node Inspector]
 - `gulp test`: This is supposed to run all the test cases.
 
-	- `gulp testServer`: continuous testing for server 
-	- `gulp testServerOnce`
-	- `gulp testOthers`: continuous testing for configuration
-	- `gulp testOthersOnce`
+	- `gulp testServer`: continuous testing for server. If --debug added at command line, [Istanbul] will be ignored and you can debug with real source code not the instrumented one. Also it increases the timeout period for mocha test cases so that you can debug your code. However, this flag doesn't put you into debug mode, you need to run `node debug $(which gulp) testServer --debug` instead.
+	- `gulp testServerOnce`: one off testing for server. The same explanation for --debug flag.
+	- `gulp testOthers`: continuous testing for configuration. The same explanation for --debug flag.
+	- `gulp testOthersOnce`: one off testing for configuration. The same explanation for --debug flag.
 	- `gulp testProtractor`: runs only the protractor test cases
 	- `gulp testE2e`: boots up the server and then runs protractor test cases
 
