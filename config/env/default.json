@@ -32,11 +32,15 @@
 			".tmp/frontend/vendor/**/*.js"
 		],
 		"testServerFolder": "test/test-server",
+		"testIntegrationFolder": "test/test-integration",
 		"testOthersFolder": "test/test-others",
 		"testE2eFolder": "test/test-e2e",
 		"watchTestServerFiles": [
 			"server/**/*.js", "test/test-server/**/*.js"
 		],
+        "watchTestIntegrationFiles": [
+			"server/**/*.js", "test/test-integration/**/*.js"
+        ],
 		"watchTestOthersFiles": [
 			"config/**/*.js", 
 			"test/test-others/**/*.js"

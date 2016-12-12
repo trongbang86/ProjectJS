@@ -37,27 +37,52 @@ __tasks__.test = function(done){
  * return a common stream for running
  * test-server with coverage
  */
+
 function __testServer__() {
+    var sourceCollect = ['./server/**/*.js'],
+        testCollect =   [Project.gulp.testServerFolder + '/bootstrap.js',
+                                Project.gulp.testServerFolder + '/**/*.js'],
+        coverageFolder = './coverage/test-server';
+    return __test__(sourceCollect, testCollect, coverageFolder);
+
+}
+
+/**
+ * return a common stream for running
+ * test-integration with coverage
+ */
+function __testIntegration__() {
+    var sourceCollect = ['./server/**/*.js'],
+        testCollect =   [Project.gulp.testIntegrationFolder + '/bootstrap.js',
+                                Project.gulp.testIntegrationFolder + '/**/*.js'],
+        coverageFolder = './coverage/test-integration';
+    return __test__(sourceCollect, testCollect, coverageFolder);
+}
+
+/**
+ * return a common stream for running
+ * test-* with coverage
+ */
+function __test__(sourceCollect, testCollect, coverageFolder) {
     var debugFlag = __argv__['debug'];
     var timeout = 2000;
     
     if(debugFlag){
         timeout = 999999;
     }
-	return gulp.src(['./server/**/*.js'])
+	return gulp.src(sourceCollect)
                 .pipe(gulpif(!debugFlag, istanbul({includeUntested: true})))
                 .pipe(gulpif(!debugFlag, istanbul.hookRequire()))
                 .on('finish', function() {
-                    gulp.src([Project.gulp.testServerFolder + '/bootstrap.js',
-                                Project.gulp.testServerFolder + '/**/*.js'])
+                    gulp.src(testCollect)
                         .pipe(mocha({
                             reporter: 'spec',
                             timeout: timeout
                         }))
                         .pipe(gulpif (!debugFlag, istanbul.writeReports({
-                            dir: './coverage/test-server',
+                            dir: coverageFolder,
                             reporters: [ 'html' ],
-                            reportOpts: { dir: './coverage/test-server'}
+                            reportOpts: { dir: coverageFolder}
                         })))
                         .once('error', function() {
                             Project.shutdown();
@@ -74,6 +99,21 @@ function __testServer__() {
                     Project.shutdown();
                 });
 
+}
+
+/* @Inherit */
+__tasks__.testIntegrationOnce = function(){
+    __init__();
+    return __testIntegration__();
+};
+
+/* @Inherit */
+__tasks__.testIntegration = function() {
+    __init__();
+    __testIntegration__();
+	gulp.watch(Project.gulp.watchTestIntegrationFiles, function(){
+        __testIntegration__();
+	});
 }
 
 /* @Inherit */
@@ -95,39 +135,11 @@ __tasks__.testServer = function() {
  * a common method for testing test-others
  */
 function __testOthers__() {
-    var debugFlag = __argv__['debug'];
-    var timeout = 2000;
-    
-    if(debugFlag){
-        timeout = 999999;
-    }
-    return gulp.src('./config/**/*.js')
-        .pipe(gulpif(!debugFlag, istanbul({includeUntested: true})))
-        .pipe(gulpif(!debugFlag, istanbul.hookRequire()))
-        .on('finish', function() {
-            gulp.src(Project.gulp.testOthersFolder + '/**/*.js')
-                .pipe(mocha({
-                    reporter: 'spec'
-                }))
-                .pipe(gulpif(!debugFlag, istanbul.writeReports({
-                    dir: './coverage/test-others',
-                    reporters: [ 'html' ],
-                    reportOpts: { dir: './coverage/test-others'}
-                })))
-                .once('error', function() {
-                    Project.shutdown();
-                })
-                .once('end', function() {
-                    Project.shutdown();
-                });
-        
-        })
-        .once('error', function() {
-            Project.shutdown();
-        })
-        .once('end', function() {
-            Project.shutdown();
-        });
+    var sourceCollect = ['./config/**/*.js'],
+        testCollect =   [Project.gulp.testOthersFolder + '/bootstrap.js',
+                                Project.gulp.testOthersFolder + '/**/*.js'],
+        coverageFolder = './coverage/test-others';
+    return __test__(sourceCollect, testCollect, coverageFolder);
 
 }
 
